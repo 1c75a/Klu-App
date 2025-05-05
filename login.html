@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Klu Health</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="Klu Logo.png">
+    <style>
+        /* Add hover effect for password toggle icon */
+        .toggle-password {
+            transition: color 0.2s ease;
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-logo">
+            <img src="Klu Logo.png" alt="Klu Logo" style="height: 140px; width: auto;">
+        </div>
+        <h1>Welcome back</h1>
+        <p class="auth-subtitle">Track your cycle, log symptoms, and get personalized insights</p>
+        
+        <form class="auth-form" onsubmit="loginUser(event)">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-input">
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <i class="fas fa-eye-slash toggle-password" onclick="togglePasswordVisibility()"></i>
+                </div>
+                <a href="forgot-password.html" class="forgot-password">Forgot password?</a>
+            </div>
+            <button type="submit" class="auth-btn">Log in</button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>or sign in with</span>
+        </div>
+        
+        <div class="social-auth">
+            <button class="social-btn google" onclick="socialLogin('google')">
+                <img src="googleLogo.svg" alt="Google" style="width:24px;height:24px;">
+                Continue with Google
+            </button>
+            <button class="social-btn apple" onclick="socialLogin('apple')">
+                <i class="fab fa-apple"></i>
+                Continue with Apple
+            </button>
+        </div>
+        
+        <p class="auth-redirect">
+            Don't have an account? <a href="register.html">Sign up</a>
+        </p>
+    </div>
+    
+    <div class="modal" id="signInModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img src="Klu Logo.png" alt="Klu Logo" style="height: 75px; width: auto;">
+            </div>
+            <div class="modal-body">
+                <h2>Sign In</h2>
+                <p>Enter your email and password to sign in.</p>
+                <form>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-input">
+                            <input type="password" id="password" placeholder="Enter your password" required>
+                            <i class="fas fa-eye-slash toggle-password" onclick="togglePasswordVisibility()"></i>
+                        </div>
+                        <a href="forgot-password.html" class="forgot-password">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="auth-btn">Log in</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="close-btn" onclick="closeModal()">Close</button>
+                <button class="signin-btn">Sign In</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+        
+        // Handle login form submission
+        function loginUser(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            submitBtn.disabled = true;
+            // Get users from localStorage
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            // Check credentials
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                localStorage.setItem('currentUser', email);
+                setTimeout(function() {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+            } else {
+                alert('Invalid email or password. Please try again.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Updated socialLogin function to use the consent popup
+        function socialLogin(provider) {
+            // Show loading indicator on the button
+            const button = document.querySelector(`.social-btn.${provider}`);
+            const originalContent = button.innerHTML;
+            
+            if (provider === 'google') {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+            } else {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+            }
+            
+            button.disabled = true;
+            
+            // Show consent popup (for demo purposes)
+            setTimeout(function() {
+                showConsentPopup(provider, button, originalContent);
+            }, 1000);
+        }
+        
+        function showConsentPopup(provider, button, originalContent) {
+            // Create modal overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.zIndex = '1000';
+            
+            // Create modal content
+            const modal = document.createElement('div');
+            modal.style.backgroundColor = 'white';
+            modal.style.borderRadius = '12px';
+            modal.style.padding = '24px';
+            modal.style.width = '90%';
+            modal.style.maxWidth = '400px';
+            modal.style.maxHeight = 'calc(100vh - 60px)';
+            modal.style.overflowY = 'auto';
+            modal.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+            
+            const providerName = provider.charAt(0).toUpperCase() + provider.slice(1);
+            const providerColor = provider === 'google' ? '#4285F4' : '#000';
+            const providerIcon = provider === 'google' ? 
+                '<img src="googleLogo.svg" alt="Google" style="width:28px;height:28px;filter:contrast(1.2);object-fit:contain;">' : 
+                '<i class="fab fa-apple" style="font-size:28px;"></i>';
+            
+            modal.innerHTML = `
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="font-size:20px;font-weight:bold;margin-bottom:16px;">Sign in with ${providerName}</div>
+                    <p style="color:#666;margin-bottom:24px;">Connect your ${providerName} account to sign in to Klu Health</p>
+                    <div style="display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+                        <div style="width:48px;height:48px;border-radius:50%;background-color:white;display:flex;align-items:center;justify-content:center;box-shadow: 0 0 5px rgba(0,0,0,0.2);border:2px solid ${providerColor};">
+                            ${providerIcon}
+                        </div>
+                        <span style="margin:0 12px;color:#ccc;">→</span>
+                        <div style="width:48px;height:48px;border-radius:50%;background-color:white;display:flex;align-items:center;justify-content:center;box-shadow: 0 0 5px rgba(0,0,0,0.2);border:2px solid #ee6aa7;">
+                            <img src="Klu Logo.png" style="width:35px;height:35px;filter:contrast(1.2);object-fit:contain;" alt="Klu Logo">
+                        </div>
+                    </div>
+                    <p style="color:#666;font-size:14px;margin-bottom:16px;">This will allow Klu Health to:</p>
+                    <ul style="text-align:left;color:#666;font-size:14px;margin-bottom:24px;padding-left:20px;">
+                        <li style="margin-bottom:8px;">Access your name and profile picture</li>
+                        <li style="margin-bottom:8px;">Access your email address</li>
+                        <li>Access your existing account linked to your ${providerName} profile</li>
+                    </ul>
+                    <div style="background-color:#f9f0f5;padding:12px;border-radius:8px;text-align:left;margin-bottom:24px;">
+                        <p style="font-size:14px;color:#666;margin-bottom:8px;">By continuing, you agree to:</p>
+                        <div style="display:flex;align-items:center;margin-bottom:8px;">
+                            <input type="checkbox" checked style="margin-right:8px;" id="terms-checkbox">
+                            <label for="terms-checkbox" style="font-size:14px;color:#666;">Klu's <a href="terms.html" style="color:#ee6aa7;">Terms of Service</a> and <a href="#" style="color:#ee6aa7;">Privacy Policy</a></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <button id="cancel-btn" style="padding:10px 24px;border-radius:24px;border:1px solid #ee6aa7;background:white;color:#ee6aa7;font-weight:500;cursor:pointer;transition:background-color 0.2s ease, color 0.2s ease;" 
+                    onmouseover="this.style.backgroundColor='#ee6aa7'; this.style.color='white';" 
+                    onmouseout="this.style.backgroundColor='white'; this.style.color='#ee6aa7';">Cancel</button>
+                    <button id="allow-btn" style="padding:10px 32px;border-radius:24px;border:none;background-color:#ee6aa7;color:white;font-weight:500;cursor:pointer;transition:background-color 0.2s ease;" 
+                    onmouseover="this.style.backgroundColor='#e05a97';" 
+                    onmouseout="this.style.backgroundColor='#ee6aa7';">Continue</button>
+                </div>
+            `;
+            
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // Event listeners for buttons
+            document.getElementById('cancel-btn').addEventListener('click', function() {
+                // Restore original button state
+                button.innerHTML = originalContent;
+                button.disabled = false;
+                
+                // Remove overlay
+                document.body.removeChild(overlay);
+            });
+            
+            document.getElementById('allow-btn').addEventListener('click', function() {
+                // Check if terms checkbox is checked
+                const termsCheckbox = document.getElementById('terms-checkbox');
+                if (!termsCheckbox.checked) {
+                    alert('You must agree to the Terms of Service and Privacy Policy to continue.');
+                    return;
+                }
+                
+                // Remove overlay
+                document.body.removeChild(overlay);
+                
+                // Show loading on button again
+                if (provider === 'google') {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                } else {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                }
+                
+                // Simulate login process
+                setTimeout(function() {
+                    window.location.href = "dashboard.html";
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,4647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Klu Health</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="Klu Logo.png">
+    <style>
+        /* Global Button Styles */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Variants */
+        .btn-primary {
+            background-color: #ee6aa7;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #e05a97;
+        }
+
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-danger {
+            background-color: #ff6b6b;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff5252;
+        }
+
+        /* Calendar action buttons */
+        .calendar-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        /* Update metric button specific styles */
+        .update-metric-btn {
+            background-color: transparent;
+            border: 1px solid #ee6aa7;
+            color: #ee6aa7;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .update-metric-btn:hover {
+            background-color: #ee6aa7;
+            color: white;
+        }
+
+        /* Track symptoms button */
+        .track-symptoms-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #ee6aa7;
+            font-size: 0.9rem;
+            min-width: 90px;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background-color: transparent;
+            color: #ee6aa7;
+        }
+
+        .track-symptoms-btn:hover {
+            background-color: #ee6aa7;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(238, 106, 167, 0.2);
+        }
+
+        /* Date styles */
+        .date {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .date:hover {
+            background-color: #f9f9f9;
+            transform: scale(1.1);
+        }
+        
+        .date.period {
+            background-color: rgba(238, 106, 167, 0.2);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .date.period:hover {
+            background-color: rgba(238, 106, 167, 0.3);
+        }
+
+        /* Desktop Calendar Styles */
+        @media (min-width: 1025px) {
+            .calendar-mini {
+                max-width: 100%;
+                margin-bottom: 3rem;
+            }
+            
+            .calendar-container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .calendar-wrapper {
+                max-width: 100%;
+                padding: 1.5rem 2rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                border-radius: 16px;
+            }
+            
+            .calendar-days, .calendar-dates {
+                gap: 0.7rem;
+                max-width: 420px;
+                margin: 0 auto;
+            }
+            
+            .date {
+                width: 46px;
+                height: 46px;
+                font-size: 0.95rem;
+                margin: 0 auto;
+            }
+            
+            .weekday {
+                font-size: 0.85rem;
+                padding: 0.7rem 0;
+            }
+            
+            .calendar-header {
+                margin-bottom: 1.5rem;
+                max-width: 420px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .calendar-header h3 {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+            
+            .calendar-legend {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 1.5rem;
+                gap: 2rem;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .legend-item p {
+                font-size: 0.9rem;
+            }
+            
+            .period-buttons {
+                margin-left: auto;
+            }
+            
+            .period-track-btn {
+                padding: 0.6rem 1.2rem;
+                font-size: 1rem;
+            }
+        }
+        
+        /* Tablet Calendar Adjustments */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .calendar-mini {
+                margin-bottom: 2.5rem;
+            }
+            
+            .calendar-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .calendar-wrapper {
+                padding: 1.3rem;
+                border-radius: 14px;
+            }
+            
+            .calendar-days, .calendar-dates {
+                gap: 0.6rem;
+                max-width: 380px;
+                margin: 0 auto;
+            }
+            
+            .date {
+                width: 38px;
+                height: 38px;
+            }
+            
+            .calendar-legend {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.5rem;
+                margin-top: 1.2rem;
+            }
+            
+            .calendar-header {
+                max-width: 380px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        /* Mobile Calendar Adjustments */
+        @media (max-width: 767px) {
+            .calendar-container {
+                width: 100%;
+            }
+            
+            .calendar-wrapper {
+                padding: 1rem;
+            }
+            
+            .calendar-days, .calendar-dates {
+                gap: 0.4rem;
+            }
+            
+            .date {
+                width: 32px;
+                height: 32px;
+                font-size: 0.85rem;
+            }
+            
+            .weekday {
+                font-size: 0.75rem;
+                padding: 0.4rem 0;
+            }
+            
+            .calendar-legend {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+            }
+            
+            .legend-item p {
+                font-size: 0.8rem;
+            }
+            
+            .period-buttons {
+                margin-left: 0;
+                margin-top: 0.5rem;
+                width: 100%;
+            }
+            
+            .period-track-btn {
+                width: 100%;
+                padding: 0.5rem 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        /* Prediction Cards Styles */
+        .prediction-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+        
+        .prediction-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .prediction-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .fertile-card {
+            background-color: #f5f0f8;
+        }
+        
+        .ovulation-card {
+            background-color: #e7d6f0;
+        }
+        
+        .period-card {
+            background-color: #ffeef2;
+        }
+        
+        .prediction-date {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #333;
+        }
+        
+        .prediction-type {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .prediction-icon {
+            margin-top: 0.5rem;
+        }
+        
+        .icon-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+        
+        .fertile-icon {
+            background-color: rgba(95, 36, 109, 0.3);
+        }
+        
+        .ovulation-icon {
+            background-color: #5f246d;
+        }
+        
+        .period-icon {
+            background-color: #ee6aa7;
+        }
+        
+        @media (max-width: 768px) {
+            .prediction-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .prediction-card {
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Toast message styles */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* Update calendar legend to include ovulation */
+        .calendar-legend {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0 1rem;
+            margin-top: 1rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .period-color {
+            background-color: rgba(238, 106, 167, 0.7);
+        }
+        
+        .fertile-color {
+            background-color: rgba(95, 36, 109, 0.5);
+        }
+        
+        .ovulation-color {
+            background-color: #5f246d;
+        }
+        
+        .legend-item p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Remove old button styles */
+        .btn {
+            display: none;
+        }
+        
+        .btn-primary {
+            display: none;
+        }
+        
+        .btn-secondary {
+            display: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        /* Profile Modal Styles */
+        .profile-modal {
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .profile-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-picture {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .edit-picture-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: #ee6aa7;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .profile-name-large {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 0;
+        }
+        
+        .profile-details {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .detail-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .detail-group label {
+            width: 120px;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .edit-btn {
+            background: none;
+            border: none;
+            color: #ee6aa7;
+            cursor: pointer;
+            padding: 4px;
+            margin-left: 8px;
+        }
+        
+        .edit-btn:hover {
+            color: #e05a97;
+        }
+        
+        .notification-settings {
+            flex: 1;
+        }
+        
+        .notification-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .notification-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .notification-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .notification-item label {
+            color: #333;
+            font-weight: normal;
+        }
+        
+        /* Input styles for editing */
+        .detail-value input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .detail-value input:focus {
+            outline: none;
+            border-color: #ee6aa7;
+            box-shadow: 0 0 0 2px rgba(238, 106, 167, 0.1);
+        }
+        
+        .detail-value .update-metric-btn {
+            padding: 4px 12px;
+            margin-left: 8px;
+            font-size: 0.9rem;
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: #ee6aa7;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .slider.round {
+            border-radius: 34px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: #ee6aa7;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e05a97;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        /* Calendar Styles */
+        .calendar-nav {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-nav:hover {
+            color: #ee6aa7;
+        }
+        
+        /* Add animation for page transitions */
+        .main-content {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* Make elements more interactive */
+        .log-card, .insight-card {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .log-card:hover, .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .date:not(.inactive) {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .date:not(.inactive):hover {
+            transform: scale(1.1);
+            font-weight: bold;
+        }
+        
+        /* Health Modal Styles */
+        .health-modal {
+            max-width: 700px;
+        }
+        
+        .health-tabs {
+            display: flex;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        
+        .tab-btn {
+            padding: 0.8rem 1.2rem;
+            border: none;
+            background: none;
+            font-weight: 500;
+            color: #777;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .tab-btn:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ee6aa7;
+            transition: width 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #ee6aa7;
+        }
+        
+        .tab-btn.active:after {
+            width: 100%;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .health-summary {
+            margin-bottom: 2rem;
+        }
+        
+        .health-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .health-card {
+            padding: 1.2rem;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .health-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fce7f0;
+            color: #ee6aa7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .health-info h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .health-meter {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            background-color: #ee6aa7;
+            border-radius: 3px;
+        }
+        
+        .health-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .recommendation-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .recommendation-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #f0f0f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .recommendation-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transform: translateY(-3px);
+        }
+        
+        .recommendation-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #fce7f0;
+            color: #ee6aa7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .recommendation-content h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .recommendation-content p {
+            margin: 0 0 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .read-more {
+            color: #ee6aa7;
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .period-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+        }
+        
+        .stat-box {
+            flex: 1;
+            text-align: center;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            margin: 0 0.5rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ee6aa7;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .period-chart {
+            margin-top: 2rem;
+        }
+        
+        .chart-placeholder {
+            margin-top: 1rem;
+            height: 200px;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+            padding: 1rem;
+            position: relative;
+        }
+        
+        .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 160px;
+        }
+        
+        .chart-bar {
+            width: 30px;
+            background-color: #ee6aa7;
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .chart-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .chart-labels div {
+            flex: 1;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        .symptoms-list {
+            margin: 1.5rem 0;
+        }
+        
+        .symptom-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .symptom-name {
+            font-weight: 500;
+            color: #333;
+            width: 100px;
+        }
+        
+        .symptom-frequency {
+            flex: 1;
+        }
+        
+        .frequency-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .frequency-fill {
+            height: 100%;
+            background-color: #ee6aa7;
+            border-radius: 4px;
+        }
+        
+        .frequency-label {
+            font-size: 0.8rem;
+            color: #777;
+            text-align: right;
+        }
+        
+        .track-btn {
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .metric-card {
+            padding: 1.5rem;
+            border-radius: 12px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+        
+        .metric-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fce7f0;
+            color: #ee6aa7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+        
+        .metric-name {
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-date {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 1rem;
+        }
+        
+        /* Settings Modal Styles */
+        .settings-modal {
+            max-width: 600px;
+        }
+        
+        .settings-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .settings-section {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .settings-section h3 {
+            margin-top: 0;
+            margin-bottom: 1.2rem;
+            color: #333;
+        }
+        
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .settings-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .settings-control {
+            display: flex;
+            align-items: center;
+        }
+        
+        .settings-value {
+            font-weight: 500;
+            color: #777;
+        }
+        
+        .settings-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .link-btn {
+            color: #ee6aa7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #1a1a2e;
+            color: #fff;
+        }
+        
+        body.dark-mode .sidebar,
+        body.dark-mode .main-content,
+        body.dark-mode .log-card,
+        body.dark-mode .insight-card,
+        body.dark-mode .cycle-card,
+        body.dark-mode .calendar-wrapper,
+        body.dark-mode .bottom-nav {
+            background-color: #16213e;
+            color: #fff;
+        }
+        
+        body.dark-mode .modal-content {
+            background-color: #16213e;
+            color: #fff;
+        }
+        
+        body.dark-mode .profile-name-large,
+        body.dark-mode .detail-value,
+        body.dark-mode .settings-label,
+        body.dark-mode .tab-btn.active,
+        body.dark-mode h3, 
+        body.dark-mode h4 {
+            color: #fff;
+        }
+        
+        body.dark-mode .tab-btn {
+            color: #aaa;
+        }
+        
+        body.dark-mode .health-card,
+        body.dark-mode .metric-card,
+        body.dark-mode .stat-box,
+        body.dark-mode .chart-placeholder {
+            background-color: #1e2944;
+        }
+        
+        body.dark-mode .recommendation-card {
+            background-color: #1e2944;
+            border-color: #16213e;
+        }
+        
+        body.dark-mode .calendar-dates .date:not(.inactive) {
+            color: #fff;
+        }
+        
+        body.dark-mode .calendar-dates .date.inactive {
+            color: #555;
+        }
+
+        /* Article Modal Styles */
+        .article-modal {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5) !important;
+            z-index: 1000;
+        }
+        
+        .article-modal .modal-content {
+            background-color: #ffffff;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            position: relative;
+        }
+        
+        .article-modal .modal-body {
+            padding: 1.5rem;
+            line-height: 1.6;
+            background-color: #ffffff;
+        }
+        
+        .article-modal h3 {
+            color: #ee6aa7;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .article-modal p {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .article-modal ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            color: #333;
+        }
+        
+        .article-modal li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-modal .modal-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .article-modal .modal-footer {
+            background-color: #ffffff;
+            border-top: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .article-modal .close-modal {
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        
+        .article-modal .close-modal:hover {
+            color: #333;
+        }
+        
+        /* Symptom Tracker Modal Styles */
+        .tracker-modal {
+            max-width: 700px;
+        }
+        
+        .tracker-date {
+            font-weight: 500;
+            color: #777;
+            margin-bottom: 1.5rem;
+        }
+        
+        .symptom-categories {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .category-section h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+        
+        .symptom-checkbox {
+            position: relative;
+        }
+        
+        .symptom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .symptom-checkbox label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0.5rem;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .symptom-checkbox input:checked + label {
+            background-color: #fce7f0;
+            border-color: #ee6aa7;
+        }
+        
+        .symptom-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .symptom-checkbox input:checked + label .symptom-icon {
+            background-color: #ee6aa7;
+            color: white;
+        }
+        
+        .symptom-name {
+            font-size: 0.9rem;
+        }
+        
+        .intensity-slider {
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 12px;
+        }
+        
+        .intensity-slider input[type="range"] {
+            width: 100%;
+            margin: 0.5rem 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            outline: none;
+        }
+        
+        .intensity-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ee6aa7;
+            cursor: pointer;
+        }
+        
+        .intensity-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 0.5rem;
+        }
+        
+        .notes-section textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border 0.3s ease;
+        }
+        
+        .notes-section textarea:focus {
+            outline: none;
+            border-color: #ee6aa7;
+        }
+        
+        /* Metric Update Modal Styles - removed */
+        .btn.track-symptoms-btn {
+            background-color: transparent;
+            border: 1px solid #ee6aa7;
+            color: #ee6aa7;
+            border-radius: 20px;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn.track-symptoms-btn:hover {
+            background-color: #ee6aa7;
+            color: #fff;
+        }
+
+        /* Symptom Tracker Modal - match Update Metric Modal */
+        #symptomTrackerModal .modal-content {
+            max-width: 400px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            position: relative;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        #symptomTrackerModal .modal-header {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #symptomTrackerModal .modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        #symptomTrackerModal .close-modal {
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        #symptomTrackerModal .close-modal:hover {
+            color: #333;
+        }
+        #symptomTrackerModal .modal-body {
+            padding: 1.5rem;
+            background: #fff;
+        }
+        #symptomTrackerModal .modal-footer {
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        #symptomTrackerModal .btn {
+            min-width: 90px;
+        }
+        #symptomTrackerModal .category-section h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            color: #555;
+            font-size: 1rem;
+        }
+        #symptomTrackerModal .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.7rem;
+        }
+        #symptomTrackerModal .symptom-checkbox label {
+            padding: 0.7rem 0.3rem;
+            font-size: 0.95rem;
+        }
+        #symptomTrackerModal .intensity-slider {
+            padding: 0.7rem;
+        }
+        #symptomTrackerModal .notes-section textarea {
+            font-size: 0.95rem;
+            padding: 0.7rem;
+        }
+        #symptomTrackerModal .tracker-date {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ee6aa7;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(238, 106, 167, 0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+            z-index: 2000;
+        }
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        /* Article Modal - match Metrics/Symptoms Modal */
+        #articleModal .modal-content {
+            max-width: 400px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            position: relative;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        #articleModal .modal-header {
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #articleModal .modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 1.3rem;
+        }
+        #articleModal .close-modal {
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        #articleModal .close-modal:hover {
+            color: #333;
+        }
+        #articleModal .modal-body {
+            padding: 1.5rem;
+            background: #fff;
+        }
+        #articleModal .modal-footer {
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        #articleModal .btn {
+            min-width: 90px;
+        }
+        
+        /* Add ovulation indicator style */
+        .date.ovulation {
+            background-color: #5f246d;
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Period buttons container */
+        .period-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-left: auto;
+        }
+        
+        /* Period tracking button styles */
+        .period-track-btn, .period-clear-btn {
+            background-color: #ee6aa7;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .period-track-btn:hover, .period-clear-btn:hover {
+            background-color: #e05a97;
+            transform: translateY(-2px);
+        }
+        
+        .period-track-btn.active {
+            background-color: #5f246d;
+        }
+        
+        .period-clear-btn {
+            background-color: #ff6b6b;
+        }
+        
+        .period-clear-btn:hover {
+            background-color: #ff5252;
+        }
+        
+        /* Period selection styles */
+        .date.period-selecting {
+            background-color: rgba(238, 106, 167, 0.3);
+            border: 2px dashed #ee6aa7;
+        }
+        
+        /* Toast message styles */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .toast.show {
+            opacity: 1;
+        }
+        
+        /* Update calendar legend to include ovulation */
+        .calendar-legend {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0 1rem;
+            margin-top: 1rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .period-color {
+            background-color: rgba(238, 106, 167, 0.7);
+        }
+        
+        .fertile-color {
+            background-color: rgba(95, 36, 109, 0.5);
+        }
+        
+        .ovulation-color {
+            background-color: #5f246d;
+        }
+        
+        .legend-item p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        /* Calendar action buttons */
+        .calendar-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        .calendar-actions .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .calendar-actions .btn-primary {
+            background-color: #ee6aa7;
+            color: white;
+        }
+        
+        .calendar-actions .btn-primary:hover {
+            background-color: #e05a97;
+            transform: translateY(-2px);
+        }
+        
+        
+        .calendar-actions .btn-secondary:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        /* Date styles */
+        .date {
+            width: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .date:hover {
+            background-color: #f9f9f9;
+            transform: scale(1.1);
+        }
+        
+        .date.period {
+            background-color: rgba(238, 106, 167, 0.2);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .date.period:hover {
+            background-color: rgba(238, 106, 167, 0.3);
+        }
+        
+        /* Predicted period style */
+        .date.predicted-period {
+            position: relative;
+        }
+        
+        /* For better visualization in the legend */
+        .predicted-dot {
+            width: 6px;
+            height: 6px;
+            background-color: rgba(238, 106, 167, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .legend-predicted-period {
+            position: relative;
+            background-color: transparent;
+        }
+        
+        .legend-predicted-period::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: rgba(238, 106, 167, 0.7);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Predicted fertile window styles */
+        .date.predicted-fertile {
+            position: relative;
+        }
+        
+        .date.predicted-fertile::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: rgba(95, 36, 109, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .legend-predicted-fertile {
+            position: relative;
+            background-color: transparent;
+        }
+        
+        .legend-predicted-fertile::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: rgba(95, 36, 109, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Predicted ovulation styles */
+        .date.predicted-ovulation {
+            position: relative;
+        }
+        
+        .date.predicted-ovulation::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #5f246d;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .legend-predicted-ovulation {
+            position: relative;
+            background-color: transparent;
+        }
+        
+        .legend-predicted-ovulation::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background-color: #5f246d;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Prediction Cards Styles */
+        .cycle-overview {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 2.5rem;
+        }
+        
+        .cycle-card {
+            margin-bottom: 0;
+        }
+        
+        .prediction-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 0 1rem;
+        }
+        
+        .prediction-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .prediction-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .fertile-card {
+            background-color: #f5f0f8;
+        }
+        
+        .ovulation-card {
+            background-color: #e7d6f0;
+        }
+        
+        .period-card {
+            background-color: #ffeef2;
+        }
+        
+        .prediction-date {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #333;
+        }
+        
+        .prediction-type {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .prediction-icon {
+            margin-top: 0.5rem;
+        }
+        
+        .icon-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+        
+        .fertile-icon {
+            background-color: rgba(95, 36, 109, 0.3);
+        }
+        
+        .ovulation-icon {
+            background-color: #5f246d;
+        }
+        
+        .period-icon {
+            background-color: #ee6aa7;
+        }
+        
+        @media (max-width: 768px) {
+            .prediction-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .prediction-card {
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        /* Custom icon colors for log cards */
+        .log-icon.symptoms-icon {
+            background-color: #85c7e8;
+            color: white;
+        }
+        
+        .log-icon.mood-icon {
+            background-color: rgba(95, 36, 109, 0.1);
+            color: #5f246d;
+        }
+        
+        /* Remove the responsive symptom cards styles since we're using standard cards now */
+        @media (max-width: 768px) {
+            .log-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Remove this rule since we no longer have span-2 cards */
+            .log-card[style*="grid-column: span 2"] {
+                grid-column: span 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .log-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Symptoms summary styles */
+        .symptoms-list {
+            margin: 1.5rem 0;
+        }
+        
+        .symptom-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .symptom-name {
+            font-weight: 500;
+            color: #333;
+            width: 100px;
+        }
+        
+        .symptom-frequency {
+            flex: 1;
+        }
+        
+        .frequency-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .frequency-fill {
+            height: 100%;
+            background-color: #ee6aa7;
+            border-radius: 4px;
+        }
+        
+        .frequency-label {
+            font-size: 0.8rem;
+            color: #777;
+            text-align: right;
+        }
+        
+        /* Today's Log specific styles with only two cards */
+        .log-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 599px) {
+            .log-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Add spacing between the sections */
+        .insights-section,
+        .cycle-overview,
+        .todays-log, 
+        .calendar-mini {
+            margin-bottom: 3rem;
+        }
+        
+        /* Set specific margin for todays-log */
+        .todays-log {
+            margin-bottom: 6rem !important;
+        }
+        
+        /* Reset margin for calendar-mini */
+        .calendar-mini {
+            margin-bottom: 0 !important;
+        }
+
+        /* Add a shared class for delete buttons */
+        .trash-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 0 2px;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s, color 0.2s;
+            border-radius: 50%;
+            height: 32px;
+            width: 32px;
+            justify-content: center;
+        }
+        .trash-btn:hover, .trash-btn:focus {
+            background: rgba(255,255,255,0.18);
+            color: #fffbe7;
+        }
+
+        /* Add toast notification styles */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .save-notifications-btn {
+            background: #fff;
+            color: #ee6aa7;
+            border: 2px solid #ee6aa7;
+            border-radius: 24px;
+            padding: 0.2rem 1.2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 1.2rem;
+            width: auto;
+            min-width: 64px;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+        }
+        .save-notifications-btn:hover {
+            background: #ee6aa7;
+            color: #fff;
+        }
+        .btn-apply {
+            background: #fff;
+            color: #ee6aa7;
+            border: 1px solid #ee6aa7;
+            border-radius: 24px;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            min-width: 64px;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+        }
+        .btn-apply:hover {
+            background: #ee6aa7;
+            color: #fff;
+        }
+        .btn-apply.outlined-pink {
+            background: #fff;
+            color: #ee6aa7;
+            border: 2px solid #ee6aa7;
+            border-radius: 24px;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            min-width: 64px;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+        }
+        .btn-apply.outlined-pink:hover {
+            background: #ee6aa7;
+            color: #fff;
+        }
+
+        /* Profile Modal Styles */
+        #profileModal .btn,
+        #profileModal .btn-primary,
+        #profileModal .btn-secondary {
+            display: inline-block !important;
+        }
+
+        /* Consistent Save Button Style */
+        .btn-save-pink {
+            background: #fff;
+            color: #ee6aa7;
+            border: 1px solid #ee6aa7;
+            border-radius: 24px;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            min-width: 64px;
+            box-shadow: none;
+            transition: background 0.2s, color 0.2s;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .btn-save-pink:hover, .btn-save-pink:focus {
+            background: #ee6aa7;
+            color: #fff;
+        }
+
+        /* Ensure profile modal is always on top */
+        #profileModal {
+            z-index: 3000 !important;
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <div class="app-container">
+        <!-- Sidebar Navigation (desktop) -->
+        <aside class="sidebar">
+            <div class="sidebar-header" style="height: 100px; padding: 0; margin: 0; display: flex; justify-content: center; align-items: center; overflow: visible;">
+                <img src="Klu Logo.png" alt="Klu Logo" style="height: 140px; width: auto; transform: translateY(-15px);">
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active">
+                        <a href="#home">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#insights">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Insights</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#log">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Log</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#calendar">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Calendar</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-profile">
+                <div class="profile-img">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-info">
+                    <p class="profile-name">Mandi</p>
+                    <a href="#" class="profile-settings" onclick="showProfileModal()">View profile</a>
+                </div>
+                <button class="logout-btn" onclick="logoutUser()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Cycle Overview -->
+            <section class="cycle-overview">
+                <h1 id="greeting" style="font-size: 2.2rem; margin-bottom: 1.8rem; color: #5f246d;">Hello, Mandi!</h1>
+                
+                <div class="cycle-card">
+                    <div class="cycle-info">
+                        <h2>Cycle Day 18</h2>
+                        <p>You are in your fertile window</p>
+                    </div>
+                    <div class="cycle-progress">
+                        <div class="progress-circle">
+                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#f7cee0" stroke-width="12" />
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#ee6aa7" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="135.7168" />
+                            </svg>
+                            <div class="progress-text">
+                                <p class="days-left">10</p>
+                                <p class="days-label">days left</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction Cards -->
+                <div class="prediction-container">
+                    <!-- Period Prediction Card -->
+                    <div class="prediction-card period-card">
+                        <div class="prediction-date">May 29</div>
+                        <div class="prediction-type">Next Period</div>
+                        <div class="prediction-icon">
+                            <div class="icon-circle period-icon"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fertile Prediction Card -->
+                    <div class="prediction-card fertile-card">
+                        <div class="prediction-date">Jun 7</div>
+                        <div class="prediction-type">Next Fertile</div>
+                        <div class="prediction-icon">
+                            <div class="icon-circle fertile-icon"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Ovulation Prediction Card -->
+                    <div class="prediction-card ovulation-card">
+                        <div class="prediction-date">Jun 12</div>
+                        <div class="prediction-type">Next Ovulation</div>
+                        <div class="prediction-icon">
+                            <div class="icon-circle ovulation-icon"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Insights Section -->
+            <section class="insights-section">
+                <div class="section-header">
+                    <h2>Insights for You</h2>
+                </div>
+                <div class="insights-cards" style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+                    <!-- Fertility Window Card -->
+                    <div class="insight-card" id="fertility-insight-card" style="flex:1; min-width:260px; background:#f9f9f9; border-radius:16px; box-shadow:0 2px 8px rgba(238,106,167,0.07); padding:1.5rem; display:flex; flex-direction:column; align-items:flex-start;">
+                        <div style="display:flex; align-items:center; gap:1rem; width:100%;">
+                            <div style="background:#fce7f0; color:#ee6aa7; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:1.7rem;">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <div style="flex:1;">
+                                <h3 style="margin:0 0 0.3rem 0; color:#333; font-size:1.2rem;">Fertility Window</h3>
+                                <p style="margin:0; color:#666; font-size:0.97rem;">High chance of pregnancy today. Track your fertile days for better planning.</p>
+                            </div>
+                        </div>
+                        <div style="width:100%; margin:1rem 0 0.7rem 0;">
+                            <div style="height:8px; background:#f7cee0; border-radius:4px; overflow:hidden;">
+                                <div style="width:80%; height:100%; background:#ee6aa7; border-radius:4px;"></div>
+                            </div>
+                            <div style="font-size:0.85rem; color:#999; margin-top:0.2rem;">Day 3 of 6 in your fertile window</div>
+                        </div>
+                        <button class="update-metric-btn" style="margin-top:auto;" onclick="showArticle('fertility-window')">Learn More</button>
+                    </div>
+                    <!-- Sleep Quality Card -->
+                    <div class="insight-card" style="flex:1; min-width:260px; background:#f9f9f9; border-radius:16px; box-shadow:0 2px 8px rgba(238,106,167,0.07); padding:1.5rem; display:flex; flex-direction:column; align-items:flex-start;">
+                        <div style="display:flex; align-items:center; gap:1rem; width:100%;">
+                            <div style="background:#fce7f0; color:#ee6aa7; border-radius:50%; width:48px; height:48px; display:flex; align-items:center; justify-content:center; font-size:1.7rem;">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <div style="flex:1;">
+                                <h3 style="margin:0 0 0.3rem 0; color:#333; font-size:1.2rem;">Sleep Quality</h3>
+                                <p style="margin:0; color:#666; font-size:0.97rem;">You slept 7.5 hours last night. Good sleep supports your cycle health.</p>
+                            </div>
+                        </div>
+                        <div style="width:100%; margin:1rem 0 0.7rem 0; display:flex; align-items:center; gap:0.5rem;">
+                            <div style="display:flex; gap:0.2rem;">
+                                <i class="fas fa-star" style="color:#ee6aa7;"></i>
+                                <i class="fas fa-star" style="color:#ee6aa7;"></i>
+                                <i class="fas fa-star" style="color:#ee6aa7;"></i>
+                                <i class="fas fa-star-half-alt" style="color:#ee6aa7;"></i>
+                                <i class="far fa-star" style="color:#f7cee0;"></i>
+                            </div>
+                            <span style="font-size:0.85rem; color:#999;">Sleep score: 3.5/5</span>
+                        </div>
+                        <button class="update-metric-btn" style="margin-top:auto;" onclick="showArticle('better-sleep')">Tips</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Today's Log -->
+            <section class="todays-log" style="margin-bottom: 6rem;">
+                <div class="section-header">
+                    <h2>Today's Log</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                    <!-- Top Row: Tracking Cards -->
+                    <!-- Log your symptoms Card -->
+                    <div class="log-card" onclick="showSymptomTracker()">
+                        <div style="text-align: center; margin-bottom: 10px;">
+                            <h3 style="margin: 0; font-size: 1.2rem;">Log</h3>
+                        </div>
+                        <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+                            <div style="width: 50px; height: 50px; background-color: #ffeef2; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                <i class="fas fa-plus" style="color: #ee6aa7; font-size: 1.3rem;"></i>
+                            </div>
+                        </div>
+                        <div class="log-info" style="text-align: center;">
+                            <p>Track your daily symptoms</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Symptoms Card -->
+                    <div class="log-card" style="padding: 0; overflow: hidden; border: 2px solid #ee6aa7;">
+                        <div style="background-color: #ee6aa7; padding: 0.8rem 1.2rem; width: 100%; position: relative; display: flex; align-items: center; justify-content: space-between;">
+                            <h3 style="color: white; margin: 0; font-size: 1.2rem; display: inline-block;">Symptoms</h3>
+                            <button onclick="deleteSymptoms()" class="trash-btn" aria-label="Delete symptoms"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div id="symptomsIconContainer" style="padding: 1.2rem; display: flex; justify-content: center; align-items: center; min-height: 90px;">
+                            <p style="color: #777; text-align: center;">No symptoms logged yet</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Weight Card -->
+                    <div class="log-card" style="padding: 0; overflow: hidden; border: 2px solid #5f246d;">
+                        <div style="background-color: #5f246d; padding: 0.8rem 1.2rem; width: 100%; position: relative; display: flex; align-items: center; justify-content: space-between;">
+                            <h3 style="color: white; margin: 0; font-size: 1.2rem; display: inline-block;">Weight</h3>
+                            <button onclick="deleteWeight()" class="trash-btn" aria-label="Delete weight"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div id="weightDisplayContainer" style="padding: 1.2rem; display: flex; justify-content: center; align-items: center; min-height: 90px;">
+                            <p style="color: #777; text-align: center;">No weight logged yet</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom Row: Educational Cards -->
+                    <!-- Educational Card 1 -->
+                    <div class="log-card" style="padding: 0; overflow: hidden; border-radius: 16px; cursor: pointer; border: 2px solid #ee6aa7;" onclick="showArticle('tampon-removal')">
+                        <div style="width: 100%; height: 200px; background-color: #e7d6f0; position: relative; display: flex; justify-content: center; align-items: center;">
+                            <div style="text-align: center; padding: 1rem;">
+                                <h3 style="margin-bottom: 1.5rem; color: #333; font-size: 1.3rem;">How to remove a tampon</h3>
+                                <div style="width: 80px; height: 120px; position: relative; margin: 0 auto;">
+                                    <div style="width: 40px; height: 100px; background-color: #ee6aa7; border-radius: 8px; margin: 0 auto; position: relative;">
+                                        <div style="width: 40px; height: 20px; background-color: white; position: absolute; bottom: 0; border-radius: 0 0 8px 8px;"></div>
+                                        <div style="width: 2px; height: 15px; background-color: white; position: absolute; bottom: -15px; left: 19px;"></div>
+                                    </div>
+                                    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: space-between; align-items: center; pointer-events: none;">
+                                        <i class="fas fa-arrow-down" style="color: white; font-size: 1.5rem;"></i>
+                                        <i class="fas fa-arrow-down" style="color: white; font-size: 1.5rem;"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Educational Card 2 -->
+                    <div class="log-card" style="padding: 0; overflow: hidden; border-radius: 16px; cursor: pointer; border: 2px solid #ee6aa7;" onclick="showArticle('period-skin')">
+                        <div style="width: 100%; height: 200px; background-color: #2e0a1b; position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div style="padding: 1rem; text-align: center;">
+                                <h3 style="color: white; font-size: 1.3rem;">Period skin: What to know</h3>
+                            </div>
+                            <div style="display: flex; justify-content: center; align-items: flex-end; height: 120px; position: relative;">
+                                <div style="width: 100%; height: 60px; background-color: #d8a090; border-radius: 0;">
+                                    <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%);">
+                                        <div style="width: 40px; height: 40px; background-color: #ffc0cb; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                            <div style="font-size: 1.2rem;">
+                                                <span style="display: inline-block; width: 5px; height: 5px; background-color: black; border-radius: 50%; margin: 0 3px;"></span>
+                                                <span style="display: inline-block; width: 5px; height: 5px; background-color: black; border-radius: 50%; margin: 0 3px;"></span>
+                                                <div style="width: 20px; height: 10px; border-bottom: 2px solid black; border-radius: 50%; margin-top: 3px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Educational Card 3 -->
+                    <div class="log-card" style="padding: 0; overflow: hidden; border-radius: 16px; cursor: pointer; border: 2px solid #ee6aa7;" onclick="showArticle('leak-free-hacks')">
+                        <div style="width: 100%; height: 200px; background-color: #c2dcff; position: relative; display: flex; justify-content: center; align-items: center;">
+                            <div style="text-align: center; padding: 1rem; position: relative; width: 100%;">
+                                <h3 style="margin-bottom: 0.5rem; color: #333; font-size: 1.3rem; position: absolute; top: 10px; left: 20px; text-align: left;">Leak-free period hacks</h3>
+                                <div style="width: 150px; height: 150px; margin: 0 auto; position: relative; margin-top: 30px;">
+                                    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 100px; height: 80px;">
+                                        <div style="width: 100px; height: 80px; background-color: white; border-radius: 10px;"></div>
+                                    </div>
+                                    <div style="position: absolute; bottom: 40px; right: 20px; width: 80px; height: 120px;">
+                                        <div style="width: 40px; height: 100px; background-color: #ffcba4; position: absolute; bottom: 0; right: 0; border-radius: 10px 10px 0 20px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Calendar Mini View -->
+            <section class="calendar-mini">
+                <div class="section-header">
+                    <h2>Calendar</h2>
+                    <div class="period-buttons">
+                        <button class="period-track-btn" id="periodTrackBtn">
+                            <i class="fas fa-plus"></i> Track Period
+                        </button>
+                    </div>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-wrapper">
+                        <div class="calendar-header">
+                            <button class="calendar-nav prev">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <h3>June 2023</h3>
+                            <button class="calendar-nav next">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-days">
+                            <div class="weekday">S</div>
+                            <div class="weekday">M</div>
+                            <div class="weekday">T</div>
+                            <div class="weekday">W</div>
+                            <div class="weekday">T</div>
+                            <div class="weekday">F</div>
+                            <div class="weekday">S</div>
+                        </div>
+                        <div class="calendar-dates">
+                            <!-- Calendar dates will be generated by JavaScript -->
+                        </div>
+                        <div style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #777;">
+                            <i class="fas fa-info-circle"></i> Select specific days individually for precise tracking
+                        </div>
+                    </div>
+                    <div class="calendar-legend">
+                        <div class="legend-item">
+                            <div class="legend-color period-color"></div>
+                            <p>Period</p>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color fertile-color"></div>
+                            <p>Fertile Window</p>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color ovulation-color"></div>
+                            <p>Ovulation</p>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="border: 2px solid #ee6aa7; background-color: transparent;"></div>
+                            <p>Today</p>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-predicted-period"></div>
+                            <p>Predicted Period</p>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-predicted-fertile"></div>
+                            <p>Predicted Fertile</p>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-predicted-ovulation"></div>
+                            <p>Predicted Ovulation</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Bottom Navigation Bar (mobile) -->
+        <nav class="bottom-nav">
+            <ul>
+                <li class="active">
+                    <a href="#home">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#insights">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Insights</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#log">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Log</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#calendar">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="profile-settings" onclick="showProfileModal()">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content profile-modal">
+            <div class="modal-header">
+                <h2>My Profile</h2>
+                <button class="close-btn" onclick="document.getElementById('profileModal').style.display='none'">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-section">
+                    <div class="profile-picture">
+                        <i class="fas fa-user-circle" style="font-size: 80px;"></i>
+                        <button class="edit-picture-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <h3 class="profile-name-large"></h3>
+                </div>
+                
+                <div class="profile-details">
+                    <div class="detail-group">
+                        <label>Email</label>
+                        <div class="detail-value" data-field="email"></div>
+                    </div>
+                    <div class="detail-group">
+                        <label>Birth Date</label>
+                        <div class="detail-value" data-field="birthdate"></div>
+                        <button class="edit-btn" onclick="enableHealthProfileEdit('birthdate')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <div class="detail-group">
+                        <label>Period Length</label>
+                        <div class="detail-value" data-field="periodLength"></div>
+                        <button class="edit-btn" onclick="enableHealthProfileEdit('periodLength')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <div class="detail-group">
+                        <label>Cycle Length</label>
+                        <div class="detail-value" data-field="cycleLength"></div>
+                        <button class="edit-btn" onclick="enableHealthProfileEdit('cycleLength')">
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <!-- Save Changes button removed -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-save-pink" onclick="document.getElementById('profileModal').style.display='none'">Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content settings-modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" onclick="closeSettingsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-sections">
+                    <div class="settings-section">
+                        <h3>Account Settings</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">Email Notifications</div>
+                            <div class="settings-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">Push Notifications</div>
+                            <div class="settings-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">SMS Reminders</div>
+                            <div class="settings-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Appearance</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">Dark Mode</div>
+                            <div class="settings-control">
+                                <label class="switch">
+                                    <input type="checkbox" id="darkModeToggle">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">Text Size</div>
+                            <div class="settings-control">
+                                <select class="settings-select">
+                                    <option>Small</option>
+                                    <option selected>Medium</option>
+                                    <option>Large</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>Privacy</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">App Lock</div>
+                            <div class="settings-control">
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">Data Sharing</div>
+                            <div class="settings-control">
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">Privacy Policy</div>
+                            <div class="settings-control">
+                                <a href="#" class="link-btn">View</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section">
+                        <h3>About</h3>
+                        <div class="settings-item">
+                            <div class="settings-label">Version</div>
+                            <div class="settings-value">1.0.5</div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">Terms of Service</div>
+                            <div class="settings-control">
+                                <a href="#" class="link-btn">View</a>
+                            </div>
+                        </div>
+                        <div class="settings-item">
+                            <div class="settings-label">Support</div>
+                            <div class="settings-control">
+                                <a href="#" class="link-btn">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-save-pink" onclick="saveSettings()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Article Modal -->
+    <div class="modal article-modal" id="articleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Article Title</h2>
+            </div>
+            <div class="modal-body">
+                <div id="articleContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="update-metric-btn" onclick="closeModal('articleModal')">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Symptom Tracker Modal -->
+    <div class="modal" id="symptomTrackerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Track Symptoms</h2>
+                <button class="close-modal" onclick="closeModal('symptomTrackerModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="symptomForm" onsubmit="saveSymptoms(); return false;">
+                    <div class="tracker-date">
+                        <i class="fas fa-calendar-alt"></i> Today, <span id="currentDate"></span>
+                    </div>
+                    <div class="symptom-categories">
+                        <div class="category-section">
+                            <h3>Period Symptoms</h3>
+                            <div class="symptom-grid">
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="cramps" name="symptoms">
+                                    <label for="cramps">
+                                        <div class="symptom-icon" style="background-color: #d595bd; position: relative; overflow: hidden;">
+                                            <div style="width: 16px; height: 16px; background-color: #c1272d; border-radius: 50%; position: absolute; top: 12px; left: 12px;"></div>
+                                        </div>
+                                        <span class="symptom-name">Cramps</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="headache" name="symptoms">
+                                    <label for="headache">
+                                        <div class="symptom-icon" style="background-color: #ffe0e0; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-head-side-virus" style="color: #d81b60;"></i>
+                                        </div>
+                                        <span class="symptom-name">Headache</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="backache" name="symptoms">
+                                    <label for="backache">
+                                        <div class="symptom-icon" style="background-color: #d3b9d8; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                                            <div style="width: 18px; height: 22px; background-color: #6d3506; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform: rotate(135deg); box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></div>
+                                        </div>
+                                        <span class="symptom-name">Backache</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="bloating" name="symptoms">
+                                    <label for="bloating">
+                                        <div class="symptom-icon" style="background-color: #ffeef2; display: flex; justify-content: center; align-items: center; position: relative;">
+                                            <div style="width: 20px; height: 16px; background-color: #ffb6c1; border-radius: 45% 45% 45% 45%; position: relative;">
+                                                <div style="width: 24px; height: 20px; background-color: #ffb6c1; border-radius: 50%; position: absolute; top: -3px; left: -2px; border: 1px dashed #ee6aa7;"></div>
+                                            </div>
+                                        </div>
+                                        <span class="symptom-name">Bloating</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="fatigue" name="symptoms">
+                                    <label for="fatigue">
+                                        <div class="symptom-icon" style="background-color: #e8eaf6; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-bed" style="color: #3949ab;"></i>
+                                        </div>
+                                        <span class="symptom-name">Fatigue</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="nausea" name="symptoms">
+                                    <label for="nausea">
+                                        <div class="symptom-icon" style="background-color: #f8da9b; display: flex; justify-content: center; align-items: center; position: relative;">
+                                            <div style="width: 12px; height: 12px; background-color: #6d9a3d; border-radius: 50%; position: absolute; top: 8px;"></div>
+                                            <div style="width: 9px; height: 14px; background-color: #6d9a3d; border-radius: 4px; position: absolute; top: 21px; transform: rotate(-15deg);"></div>
+                                        </div>
+                                        <span class="symptom-name">Nausea</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="category-section">
+                            <h3>Mood</h3>
+                            <div class="symptom-grid">
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="happy" name="mood">
+                                    <label for="happy">
+                                        <div class="symptom-icon" style="background-color: #fff8e1; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-smile" style="color: #ffc107;"></i>
+                                        </div>
+                                        <span class="symptom-name">Happy</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="sad" name="mood">
+                                    <label for="sad">
+                                        <div class="symptom-icon" style="background-color: #e3f2fd; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-frown" style="color: #2196f3;"></i>
+                                        </div>
+                                        <span class="symptom-name">Sad</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="anxious" name="mood">
+                                    <label for="anxious">
+                                        <div class="symptom-icon" style="background-color: #ffebee; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-angry" style="color: #f44336;"></i>
+                                        </div>
+                                        <span class="symptom-name">Anxious</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="irritable" name="mood">
+                                    <label for="irritable">
+                                        <div class="symptom-icon" style="background-color: #fbe9e7; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-grimace" style="color: #ff5722;"></i>
+                                        </div>
+                                        <span class="symptom-name">Irritable</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="calm" name="mood">
+                                    <label for="calm">
+                                        <div class="symptom-icon" style="background-color: #e8f5e9; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-dove" style="color: #4caf50;"></i>
+                                        </div>
+                                        <span class="symptom-name">Calm</span>
+                                    </label>
+                                </div>
+                                <div class="symptom-checkbox">
+                                    <input type="checkbox" id="stressed" name="mood">
+                                    <label for="stressed">
+                                        <div class="symptom-icon" style="background-color: #ede7f6; display: flex; justify-content: center; align-items: center;">
+                                            <i class="fas fa-brain" style="color: #673ab7;"></i>
+                                        </div>
+                                        <span class="symptom-name">Stressed</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Add Weight Tracking Section -->
+                        <div class="category-section">
+                            <h3>Weight Tracking</h3>
+                            <div style="padding: 0.8rem; background-color: #f9f9f9; border-radius: 12px;">
+                                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                                    <div style="width: 40px; height: 40px; background-color: #5f246d; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                        <i class="fas fa-weight" style="color: white;"></i>
+                                    </div>
+                                    <div style="flex-grow: 1;">
+                                        <label for="weightInput" style="font-weight: 500; color: #555; display: block; margin-bottom: 0.5rem;">Current Weight (lbs)</label>
+                                        <input type="number" id="weightInput" min="50" max="500" step="0.1" placeholder="Enter your weight" style="width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="category-section notes-section">
+                            <h3>Notes</h3>
+                            <textarea rows="3" placeholder="Add any notes about how you're feeling today..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="update-metric-btn">Apply</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metric Update Modal -->
+    <div id="metricUpdateModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="metricUpdateTitle">Update Metric</h2>
+                <button class="close-modal" onclick="closeMetricUpdateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="metricUpdateForm" onsubmit="saveMetricUpdate(event)">
+                    <div style="margin-bottom: 1rem;">
+                        <label for="metricValue" id="metricValueLabel" style="font-weight: 500; color: #555;"></label>
+                        <input type="text" id="metricValue" name="metricValue" class="form-input" style="width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid #e0e0e0; margin-top: 0.5rem;" required />
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <label for="metricNote" style="font-weight: 500; color: #555;">Note (optional)</label>
+                        <textarea id="metricNote" name="metricNote" rows="2" class="form-input" style="width: 100%; padding: 0.7rem; border-radius: 8px; border: 1px solid #e0e0e0; margin-top: 0.5rem;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="update-metric-btn" onclick="closeMetricUpdateModal()">Cancel</button>
+                        <button type="submit" class="update-metric-btn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast for confirmation -->
+    <div id="symptomToast" class="toast">Symptoms saved successfully!</div>
+
+    <!-- Toast for metrics -->
+    <div id="metricToast" class="toast">Metric updated successfully!</div>
+
+    </div>
+    
+    <script>
+        // Handle user logout
+        function logoutUser() {
+            // In a real app, we would clear the session/authentication
+            // For this demo, we'll just redirect to the login page
+            window.location.href = "login.html";
+        }
+        
+        // Profile Modal Functions
+        function showProfileModal() {
+            const modal = document.getElementById('profileModal');
+            if (modal) {
+                // Get current user data
+                const currentUser = localStorage.getItem('currentUser');
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === currentUser);
+                
+                // Update profile information if user exists
+                if (user) {
+                    const profileName = modal.querySelector('.profile-name-large');
+                    if (profileName) profileName.textContent = user.name || '';
+                    
+                    // Update other profile details
+                    const emailValue = modal.querySelector('.detail-value[data-field="email"]');
+                    if (emailValue) emailValue.textContent = user.email || '';
+                    
+                    const birthdateValue = modal.querySelector('.detail-value[data-field="birthdate"]');
+                    if (birthdateValue) birthdateValue.textContent = formatDate(user.birthdate) || '';
+                    
+                    const periodLengthValue = modal.querySelector('.detail-value[data-field="periodLength"]');
+                    if (periodLengthValue) periodLengthValue.textContent = (user.periodLength || '') + ' days';
+                    
+                    const cycleLengthValue = modal.querySelector('.detail-value[data-field="cycleLength"]');
+                    if (cycleLengthValue) cycleLengthValue.textContent = cycleLengthLabel(user.cycleLength) || '';
+                }
+                
+                modal.style.display = 'flex';
+            }
+        }
+        
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+        
+        
+        // Make navigation interactive
+        document.addEventListener('DOMContentLoaded', function() {
+            // Desktop Sidebar Navigation - Fix click handling
+            const sidebarLinks = document.querySelectorAll('.sidebar-nav ul li a');
+            sidebarLinks.forEach(link => {
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all sidebar items
+                    document.querySelectorAll('.sidebar-nav ul li').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Remove active class from all bottom nav items
+                    document.querySelectorAll('.bottom-nav ul li').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Add active class to parent li of clicked link immediately
+                    this.parentElement.classList.add('active');
+                    
+                    // Get the page to show based on the link's href
+                    const page = this.getAttribute('href').substring(1); // Remove the # from href
+                    
+                    // Temporarily disable scrollspy to prevent override
+                    if (window.scrollSpyEnabled) {
+                        window.scrollSpyEnabled = false;
+                        
+                        // Re-enable after scroll animation completes
+                        setTimeout(() => {
+                            window.scrollSpyEnabled = true;
+                        }, 1000);
+                    }
+                    
+                    // Special handling for Home section to include the header
+                    if (page === 'home') {
+                        // Scroll to top to show "Hello, Mandi!" header
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        // Scroll to the corresponding section
+                        const section = document.getElementById(page);
+                        if (section) {
+                            section.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                };
+            });
+            
+            // Mobile Bottom Navigation - Fix click handling
+            const bottomNavLinks = document.querySelectorAll('.bottom-nav ul li a');
+            bottomNavLinks.forEach(link => {
+                link.onclick = function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all sidebar items
+                    document.querySelectorAll('.sidebar-nav ul li').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Remove active class from all bottom nav items
+                    document.querySelectorAll('.bottom-nav ul li').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    
+                    // Add active class to parent li of clicked link immediately
+                    this.parentElement.classList.add('active');
+                    
+                    // Get the page to show based on the link's href
+                    const page = this.getAttribute('href').substring(1); // Remove the # from href
+                    
+                    // Temporarily disable scrollspy to prevent override
+                    if (window.scrollSpyEnabled) {
+                        window.scrollSpyEnabled = false;
+                        
+                        // Re-enable after scroll animation completes
+                        setTimeout(() => {
+                            window.scrollSpyEnabled = true;
+                        }, 1000);
+                    }
+                    
+                    // Special handling for Home section to include the header
+                    if (page === 'home') {
+                        // Scroll to top to show "Hello, Mandi!" header
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        // Scroll to the corresponding section
+                        const section = document.getElementById(page);
+                        if (section) {
+                            section.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                };
+            });
+            
+            // Initialize scrollspy
+            initScrollspy();
+        });
+        
+        // Initialize the symptom cards and functionality
+        function initSymptomCards() {
+            // Add click handlers for the "Log your symptoms" card
+            const logSymptomsCard = document.querySelector('.log-card .log-icon .fa-plus').closest('.log-card');
+            if (logSymptomsCard) {
+                logSymptomsCard.addEventListener('click', showSymptomTracker);
+            }
+            
+            // Add click handler for the "Symptoms" card to display the symptom summary
+            const symptomsCard = document.querySelector('.log-card[style*="border: 2px solid #f87bbb"]');
+            if (symptomsCard) {
+                symptomsCard.addEventListener('click', showSymptomSummary);
+            }
+            
+            // Load any existing symptom data
+            loadExistingSymptomData();
+        }
+        
+        // Function to load and display any existing symptom data when the page loads
+        function loadExistingSymptomData() {
+            const symptomDataStr = localStorage.getItem('symptomData');
+            if (symptomDataStr) {
+                try {
+                    const symptomData = JSON.parse(symptomDataStr);
+                    if (symptomData && symptomData.symptoms) {
+                        updateSymptomSummary(
+                            symptomData.symptoms,
+                            symptomData.notes || ''
+                        );
+                    }
+                } catch (e) {
+                    console.error('Error loading symptom data:', e);
+                }
+            }
+        }
+        
+        // Function to show the symptom tracker
+        function showSymptomTracker() {
+            const modal = document.getElementById('symptomTrackerModal');
+            
+            // Update the header color to match the new pink theme
+            const modalHeader = modal.querySelector('.modal-header');
+            if (modalHeader) {
+                modalHeader.style.backgroundColor = '#ee6aa7';
+                modalHeader.style.color = 'white';
+                
+                
+                const headerTitle = modalHeader.querySelector('h2');
+                if (headerTitle) {
+                    headerTitle.style.color = 'white';
+                }
+                
+                const closeButton = modalHeader.querySelector('.close-modal');
+                if (closeButton) {
+                    closeButton.style.color = 'white';
+                }
+            }
+            
+            // Set today's date
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+            
+            // Reset all checkboxes and textarea
+            document.querySelectorAll('.symptom-checkbox input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.querySelector('.notes-section textarea').value = '';
+            
+            // Reset and possibly load current weight value
+            const weightInput = document.getElementById('weightInput');
+            if (weightInput) {
+                // First reset the input
+                weightInput.value = '';
+                
+                // Then load data from localStorage if it exists
+                const weightDataStr = localStorage.getItem('weightData');
+                if (weightDataStr) {
+                    try {
+                        const weightData = JSON.parse(weightDataStr);
+                        if (weightData && weightData.value) {
+                            weightInput.value = weightData.value;
+                        }
+                    } catch (e) {
+                        console.error('Error loading weight data for modal:', e);
+                    }
+                }
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        // Function to save symptoms from the tracker
+        function saveSymptoms() {
+            // Gather selected symptoms
+            const symptoms = [];
+            const checkboxes = document.querySelectorAll('.symptom-checkbox input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                symptoms.push(checkbox.id);
+            });
+            const notes = document.querySelector('.notes-section textarea').value;
+            
+            // Get weight value
+            const weightInput = document.getElementById('weightInput');
+            const weightValue = weightInput ? weightInput.value : null;
+            
+            // Update the symptoms summary display for the Symptoms card
+            updateSymptomSummary(symptoms, notes);
+            
+            // Update weight display based on input
+            const weightDisplayContainer = document.getElementById('weightDisplayContainer');
+            if (weightDisplayContainer) {
+                if (weightValue && weightValue.trim() !== '' && !isNaN(parseFloat(weightValue))) {
+                    // Valid weight entered - update display and save to localStorage
+                    weightDisplayContainer.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div id="weightValue" style="font-size: 2.5rem; font-weight: bold; color: #333;">${weightValue}</div>
+                            <div style="color: #777; font-size: 0.9rem;">lbs</div>
+                        </div>
+                    `;
+                    
+                    // Store in localStorage
+                    const weightData = {
+                        value: weightValue,
+                        date: new Date().toISOString()
+                    };
+                    localStorage.setItem('weightData', JSON.stringify(weightData));
+                    // Re-enable the trash button affordance
+                    const weightCard = document.querySelector('.log-card[style*="border: 2px solid #5f246d"]');
+                    if (weightCard) {
+                        const trashBtn = weightCard.querySelector('.trash-btn');
+                        if (trashBtn) {
+                            trashBtn.classList.remove('disabled');
+                            trashBtn.disabled = false;
+                        }
+                    }
+                } else if (weightInput && weightInput.value.trim() === '') {
+                    // Weight was intentionally cleared - reset to default state
+                    weightDisplayContainer.innerHTML = '<p style="color: #777; text-align: center;">No weight logged yet</p>';
+                    localStorage.removeItem('weightData'); // Remove from localStorage
+                    // Disable the trash button affordance
+                    const weightCard = document.querySelector('.log-card[style*="border: 2px solid #5f246d"]');
+                    if (weightCard) {
+                        const trashBtn = weightCard.querySelector('.trash-btn');
+                        if (trashBtn) {
+                            trashBtn.classList.add('disabled');
+                            trashBtn.disabled = true;
+                        }
+                    }
+                }
+                // If weightValue is null or undefined, we don't change anything
+            }
+            
+            // Show confirmation toast
+            const toast = document.getElementById('symptomToast');
+            toast.textContent = symptoms.length > 0 || (weightValue && weightValue.trim() !== '') 
+                ? "Changes saved successfully!" 
+                : "No changes were made";
+            toast.classList.add('show');
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+            
+            // Close modal
+            closeModal('symptomTrackerModal');
+        }
+        
+        // Update the symptoms summary for display in the Symptoms card
+        function updateSymptomSummary(symptoms, notes) {
+            // Store the symptoms in localStorage for retrieval when clicking the Symptoms card
+            const symptomData = {
+                symptoms: symptoms,
+                notes: notes,
+                date: new Date().toLocaleDateString()
+            };
+            localStorage.setItem('symptomData', JSON.stringify(symptomData));
+            
+            // Visually update the Symptoms card to indicate there are logged symptoms
+            const symptomsCard = document.querySelector('.log-card[style*="border: 2px solid #ee6aa7"]');
+            if (symptomsCard) {
+                // Remove any existing badge if present
+                const headerDiv = symptomsCard.querySelector('div[style*="background-color: #ee6aa7"]');
+                if (headerDiv) {
+                    let badge = headerDiv.querySelector('.symptom-count-badge');
+                    if (badge) badge.remove();
+                }
+                
+                // Update the icons container with icons for the logged symptoms
+                const iconContainer = document.getElementById('symptomsIconContainer');
+                if (iconContainer) {
+                    // Define icon mappings for different symptoms
+                    const symptomIcons = {
+                        cramps: {
+                            bg: '#d595bd',
+                            html: '<div style="width: 16px; height: 16px; background-color: #c1272d; border-radius: 50%; position: absolute; top: 12px; left: 12px;"></div>'
+                        },
+                        headache: {
+                            bg: '#ffe0e0',
+                            html: '<i class="fas fa-head-side-virus" style="color: #d81b60;"></i>'
+                        },
+                        backache: {
+                            bg: '#d3b9d8',
+                            html: '<div style="width: 18px; height: 22px; background-color: #6d3506; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform: rotate(135deg); box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></div>'
+                        },
+                        bloating: {
+                            bg: '#ffeef2',
+                            html: '<div style="width: 20px; height: 16px; background-color: #ffb6c1; border-radius: 45% 45% 45% 45%; position: relative;"><div style="width: 24px; height: 20px; background-color: #ffb6c1; border-radius: 50%; position: absolute; top: -3px; left: -2px; border: 1px dashed #ee6aa7;"></div></div>'
+                        },
+                        fatigue: {
+                            bg: '#e8eaf6',
+                            html: '<i class="fas fa-bed" style="color: #3949ab;"></i>'
+                        },
+                        nausea: {
+                            bg: '#f8da9b',
+                            html: '<div style="position: relative; width: 100%; height: 100%;"><div style="width: 12px; height: 12px; background-color: #6d9a3d; border-radius: 50%; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);"></div><div style="width: 9px; height: 14px; background-color: #6d9a3d; border-radius: 4px; position: absolute; top: 21px; left: 50%; transform: translateX(-45%) rotate(-15deg);"></div></div>'
+                        },
+                        // Mood symptoms
+                        happy: {
+                            bg: '#fff8e1',
+                            html: '<i class="fas fa-smile" style="color: #ffc107;"></i>'
+                        },
+                        sad: {
+                            bg: '#e3f2fd',
+                            html: '<i class="fas fa-frown" style="color: #2196f3;"></i>'
+                        },
+                        anxious: {
+                            bg: '#ffebee',
+                            html: '<i class="fas fa-angry" style="color: #f44336;"></i>'
+                        },
+                        irritable: {
+                            bg: '#fbe9e7',
+                            html: '<i class="fas fa-grimace" style="color: #ff5722;"></i>'
+                        },
+                        calm: {
+                            bg: '#e8f5e9',
+                            html: '<i class="fas fa-dove" style="color: #4caf50;"></i>'
+                        },
+                        stressed: {
+                            bg: '#ede7f6',
+                            html: '<i class="fas fa-brain" style="color: #673ab7;"></i>'
+                        }
+                    };
+                    
+                    if (symptoms.length > 0) {
+                        // Clear the container
+                        iconContainer.innerHTML = '';
+                        
+                        // Adjust container styling based on number of symptoms
+                        if (symptoms.length <= 3) {
+                            iconContainer.style.justifyContent = 'space-around';
+                        } else {
+                            iconContainer.style.cssText = 'padding: 1.2rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; min-height: 90px;';
+                        }
+                        
+                        // Add icons for all logged symptoms
+                        symptoms.forEach(symptom => {
+                            const iconInfo = symptomIcons[symptom] || {
+                                bg: '#d3b9d8',
+                                html: '<div style="width: 18px; height: 22px; background-color: #6d3506; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transform: rotate(135deg); box-shadow: 0 1px 2px rgba(0,0,0,0.2);"></div>'
+                            };
+                            
+                            const iconDiv = document.createElement('div');
+                            iconDiv.style.cssText = `width: 40px; height: 40px; background-color: ${iconInfo.bg}; border-radius: 50%; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden;`;
+                            iconDiv.innerHTML = iconInfo.html;
+                            iconContainer.appendChild(iconDiv);
+                        });
+                        // Re-enable the trash button affordance
+                        const trashBtn = symptomsCard.querySelector('.trash-btn');
+                        if (trashBtn) {
+                            trashBtn.classList.remove('disabled');
+                            trashBtn.disabled = false;
+                        }
+                    } else {
+                        // No symptoms logged
+                        iconContainer.innerHTML = '<p style="color: #777; text-align: center;">No symptoms logged yet</p>';
+                        iconContainer.style.justifyContent = 'center';
+                    }
+                }
+            }
+        }
+        
+        // Function to show the symptom summary when clicking the Symptoms card
+        function showSymptomSummary() {
+            // Check if we have any stored symptom data
+            const symptomDataStr = localStorage.getItem('symptomData');
+            let symptomData = null;
+            
+            if (symptomDataStr) {
+                symptomData = JSON.parse(symptomDataStr);
+            }
+            
+            // Create or get the symptom summary modal
+            let modal = document.getElementById('symptomSummaryModal');
+            
+            if (!modal) {
+                // Create the modal structure
+                modal = document.createElement('div');
+                modal.id = 'symptomSummaryModal';
+                modal.className = 'modal';
+                
+                const modalHTML = `
+                    <div class="modal-content">
+                        <div class="modal-header" style="background-color: #ee6aa7; color: white;">
+                            <h2 style="color: white;">Your Symptoms</h2>
+                            <button class="close-modal" onclick="closeModal('symptomSummaryModal')" style="color: white;">&times;</button>
+                        </div>
+                        <div class="modal-body" id="symptomSummaryBody">
+                            <!-- Symptom data will be inserted here -->
+                        </div>
+                        <div class="modal-footer">
+                            <button class="update-metric-btn" onclick="closeModal('symptomSummaryModal')">Close</button>
+                            <button class="update-metric-btn" onclick="showSymptomTracker()">Add More</button>
+                        </div>
+                    </div>
+                `;
+                
+                modal.innerHTML = modalHTML;
+                document.body.appendChild(modal);
+            } else {
+                // Update existing modal to match new color scheme
+                const modalHeader = modal.querySelector('.modal-header');
+                if (modalHeader) {
+                    modalHeader.style.backgroundColor = '#ee6aa7';
+                    modalHeader.style.color = 'white';
+                    
+                    const headerTitle = modalHeader.querySelector('h2');
+                    if (headerTitle) {
+                        headerTitle.style.color = 'white';
+                    }
+                    
+                    const closeButton = modalHeader.querySelector('.close-modal');
+                    if (closeButton) {
+                        closeButton.style.color = 'white';
+                    }
+                }
+            }
+            
+            // Populate the modal with symptom data
+            const modalBody = document.getElementById('symptomSummaryBody');
+            
+            if (symptomData && symptomData.symptoms.length > 0) {
+                // Create the HTML for symptoms list
+                let symptomsHTML = `
+                    <div class="tracker-date">
+                        <i class="fas fa-calendar-alt"></i> ${symptomData.date}
+                    </div>
+                    <div class="symptoms-list">
+                `;
+                
+                // Add each symptom
+                symptomData.symptoms.forEach(symptom => {
+                    const capitalizedSymptom = symptom.charAt(0).toUpperCase() + symptom.slice(1);
+                    symptomsHTML += `
+                        <div class="symptom-item">
+                            <div class="symptom-name">${capitalizedSymptom}</div>
+                        </div>
+                    `;
+                });
+                
+                symptomsHTML += `</div>`;
+                
+                // Add notes if any
+                if (symptomData.notes) {
+                    symptomsHTML += `
+                        <div class="notes-section" style="margin-top: 1.5rem;">
+                            <h3>Notes</h3>
+                            <div style="padding: 1rem; background-color: #f9f9f9; border-radius: 12px;">
+                                ${symptomData.notes}
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                modalBody.innerHTML = symptomsHTML;
+            } else {
+                // Show message if no symptoms are logged
+                modalBody.innerHTML = `
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <p>No symptoms have been logged yet.</p>
+                        <button class="update-metric-btn" onclick="showSymptomTracker()" style="margin-top: 1rem;">Add Symptoms</button>
+                    </div>
+                `;
+            }
+            
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+        
+        // Generic modal close function
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        
+        // Function to open a modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            
+            // If opening the symptom tracker, set the current date
+            if (modalId === 'symptomTrackerModal') {
+                const today = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('currentDate').textContent = today.toLocaleDateString('en-US', options);
+            }
+        }
+        
+        // Function to close a modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Function to show article content
+        function showArticle(articleId) {
+            const modal = document.getElementById('articleModal');
+            const modalHeader = modal.querySelector('.modal-header h2');
+            const articleContent = document.getElementById('articleContent');
+            
+            if (articleId === 'fertility-window') {
+                modalHeader.textContent = 'Understanding Your Fertility Window';
+                articleContent.innerHTML = `
+                    <img src="https://flo.health/uploads/media/sulu-1200x630/07/2387-GettyImages-1160947136.jpg?v=1-0" alt="Fertility tracking" style="width:100%; border-radius:8px; margin-bottom:20px;">
+                    <p>Your fertility window is the time during your cycle when pregnancy is possible. Understanding this window can help whether you're trying to conceive or avoid pregnancy.</p>
+                    <h3>The Science Behind Fertility</h3>
+                    <p>Your fertility window typically spans about 6 days: the 5 days before ovulation and the day of ovulation itself.</p>
+                    <h3>Signs of Ovulation</h3>
+                    <ul>
+                        <li><strong>Cervical Mucus Changes:</strong> Becomes clearer, slippery, and stretchy</li>
+                        <li><strong>Slight Temperature Rise:</strong> Basal body temperature increases slightly</li>
+                        <li><strong>Mild Cramping:</strong> Some women feel a twinge or mild cramp</li>
+                    </ul>
+                `;
+            } else if (articleId === 'better-sleep') {
+                modalHeader.textContent = 'Better Sleep During Your Luteal Phase';
+                articleContent.innerHTML = `
+                    <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80" alt="Sleep during period" style="width:100%; border-radius:8px; margin-bottom:20px;">
+                    <p>Many women experience sleep disturbances during the luteal phase of their cycle. Here are some tips to help you get better rest:</p>
+                    <h3>Sleep Hygiene Tips:</h3>
+                    <ul>
+                        <li><strong>Consistent Schedule:</strong> Try to go to bed and wake up at the same time each day</li>
+                        <li><strong>Cool Temperature:</strong> Keep your bedroom between 65-68°F (18-20°C)</li>
+                        <li><strong>Limit Screen Time:</strong> Avoid screens at least 1 hour before bed</li>
+                        <li><strong>Relaxation Techniques:</strong> Try deep breathing, meditation, or gentle yoga</li>
+                    </ul>
+                `;
+            } else if (articleId === 'tampon-removal') {
+                modalHeader.textContent = 'How to Remove a Tampon';
+                articleContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="width: 120px; height: 180px; position: relative; margin: 0 auto;">
+                            <div style="width: 60px; height: 150px; background-color: #ee6aa7; border-radius: 8px; margin: 0 auto; position: relative;">
+                                <div style="width: 60px; height: 30px; background-color: white; position: absolute; bottom: 0; border-radius: 0 0 8px 8px;"></div>
+                                <div style="width: 2px; height: 20px; background-color: white; position: absolute; bottom: -20px; left: 29px;"></div>
+                            </div>
+                            <div style="position: absolute; top: 30px; left: 0; width: 100%; height: 100px; display: flex; justify-content: space-between; align-items: center; pointer-events: none;">
+                                <i class="fas fa-arrow-down" style="color: white; font-size: 2rem;"></i>
+                                <i class="fas fa-arrow-down" style="color: white; font-size: 2rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Step-by-Step Guide</h3>
+                    <p>Removing a tampon is a simple process, but it's important to do it correctly for comfort and hygiene.</p>
+                    <ol>
+                        <li><strong>Wash your hands:</strong> Always start with clean hands to prevent introducing bacteria.</li>
+                        <li><strong>Get comfortable:</strong> Sit on the toilet with your knees apart, or stand with one leg up on the toilet seat or bathtub.</li>
+                        <li><strong>Find the string:</strong> Locate the tampon string that should be hanging down.</li>
+                        <li><strong>Pull gently:</strong> Hold the string firmly and pull downward in the same angle as your vaginal canal (slightly back toward your tailbone).</li>
+                        <li><strong>Dispose properly:</strong> Wrap the used tampon in toilet paper and put it in the trash—never flush tampons down the toilet.</li>
+                    </ol>
+                    <h3>Troubleshooting Tips</h3>
+                    <ul>
+                        <li><strong>If the string isn't visible:</strong> Relax and use your clean finger to gently feel for the string. If you still can't find it, it's best to consult a healthcare provider.</li>
+                        <li><strong>If removal is uncomfortable:</strong> The tampon might not be fully saturated. Next time, try a lower absorbency tampon or wait longer before changing.</li>
+                        <li><strong>If you feel resistance:</strong> Never force it. Relax your muscles and try again with gentle, steady pressure.</li>
+                    </ul>
+                    <p><strong>Remember:</strong> Change your tampon every 4-8 hours, and never leave it in for more than 8 hours to prevent Toxic Shock Syndrome (TSS).</p>
+                `;
+            } else if (articleId === 'period-skin') {
+                modalHeader.textContent = 'Period Skin: What to Know';
+                articleContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="width: 150px; height: 150px; margin: 0 auto; position: relative; background-color: #2e0a1b; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 150px; height: 75px; background-color: #d8a090; position: absolute; bottom: 0;"></div>
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                <div style="width: 60px; height: 60px; background-color: #ffc0cb; border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+                                    <div style="font-size: 1.2rem;">
+                                        <div style="display: flex; gap: 5px; margin-bottom: 5px; justify-content: center;">
+                                            <span style="display: inline-block; width: 5px; height: 5px; background-color: black; border-radius: 50%;"></span>
+                                            <span style="display: inline-block; width: 5px; height: 5px; background-color: black; border-radius: 50%;"></span>
+                                        </div>
+                                        <div style="width: 20px; height: 10px; border-bottom: 2px solid black; border-radius: 50%; margin: 5px auto 0;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>How Your Cycle Affects Your Skin</h3>
+                    <p>Hormonal fluctuations throughout your menstrual cycle can have a significant impact on your skin. Understanding these changes can help you adapt your skincare routine accordingly.</p>
+                    <h3>Week-by-Week Skin Changes</h3>
+                    <ul>
+                        <li><strong>During menstruation:</strong> Estrogen and progesterone levels drop, which may lead to drier skin. Some people find their acne begins to heal during this time.</li>
+                        <li><strong>Follicular phase (after period):</strong> Rising estrogen levels improve skin health and appearance. Your skin likely looks its best during this time—clear, bright, and with smaller pores.</li>
+                        <li><strong>Around ovulation:</strong> Estrogen peaks, promoting collagen production and giving your skin a healthy glow.</li>
+                        <li><strong>Luteal phase (pre-period):</strong> Progesterone rises and then drops, which can trigger increased oil production and lead to breakouts 7-10 days before your period.</li>
+                    </ul>
+                    <h3>Skincare Tips for Period Skin</h3>
+                    <ul>
+                        <li><strong>Adjust your routine:</strong> Use gentler products during your period and more active ingredients like salicylic acid during the luteal phase.</li>
+                        <li><strong>Stay hydrated:</strong> Drink extra water during your period to combat bloating and help your skin stay hydrated.</li>
+                        <li><strong>Don't over-cleanse:</strong> Even if your skin feels oilier, over-washing can strip natural oils and worsen breakouts.</li>
+                        <li><strong>Spot treat:</strong> Use targeted treatments for breakouts rather than applying harsh products all over.</li>
+                        <li><strong>Be gentle:</strong> Your skin may be more sensitive during your period, so avoid harsh exfoliation or new products during this time.</li>
+                    </ul>
+                `;
+            } else if (articleId === 'leak-free-hacks') {
+                modalHeader.textContent = 'Leak-Free Period Hacks';
+                articleContent.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="width: 200px; height: 150px; margin: 0 auto; position: relative; background-color: #c2dcff; border-radius: 10px; overflow: hidden;">
+                            <div style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 120px; height: 100px;">
+                                <div style="width: 120px; height: 100px; background-color: white; border-radius: 10px;"></div>
+                            </div>
+                            <div style="position: absolute; bottom: 50px; right: 40px; width: 80px; height: 120px;">
+                                <div style="width: 40px; height: 100px; background-color: #ffcba4; position: absolute; bottom: 0; right: 0; border-radius: 10px 10px 0 20px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Smart Strategies for Leak-Free Periods</h3>
+                    <p>Period leaks can happen to anyone, but with these tips, you can prevent most accidents and feel more confident during your cycle.</p>
+                    <h3>Overnight Protection</h3>
+                    <ul>
+                        <li><strong>Double up:</strong> Use a tampon or cup with a pad/liner for maximum protection.</li>
+                        <li><strong>Period underwear:</strong> Invest in absorbent period underwear as backup or primary protection.</li>
+                        <li><strong>Position matters:</strong> For side sleepers, wear your pad slightly shifted to the back for better coverage.</li>
+                        <li><strong>Protective bedding:</strong> Use a towel or mattress protector under your sheet during heavy flow nights.</li>
+                    </ul>
+                    <h3>Daytime Strategies</h3>
+                    <ul>
+                        <li><strong>Know your flow:</strong> Track your cycle to anticipate heavy days and be prepared.</li>
+                        <li><strong>Timer technique:</strong> Set discreet reminders to change your menstrual products regularly.</li>
+                        <li><strong>Emergency kit:</strong> Keep a small pouch with period supplies in your bag, car, and workplace.</li>
+                        <li><strong>Strategic clothing:</strong> On heavy days, opt for darker colors or patterns that can disguise potential leaks.</li>
+                    </ul>
+                    <h3>Active Days</h3>
+                    <ul>
+                        <li><strong>Right products:</strong> Consider a menstrual cup or disc for physical activities as they're less likely to leak during movement.</li>
+                        <li><strong>Secure fit:</strong> Make sure pads are properly aligned and secured to underwear with wings.</li>
+                        <li><strong>Compression help:</strong> Wear tighter-fitting underwear or shorts to keep pads in place during exercise.</li>
+                    </ul>
+                    <p><strong>Pro tip:</strong> If a leak happens, cold water is your best friend. Rinse fabrics with cold water immediately—hot water sets stains.</p>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeArticleModal() {
+            document.getElementById('articleModal').style.display = 'none';
+        }
+        
+        // Metric Update Modal Logic
+        let currentMetricCard = null;
+        const metricTypes = {
+            'Weight': { label: 'Enter new weight (lbs)', type: 'number', min: 50, max: 300 },
+            'Temperature': { label: 'Enter new temperature (°F)', type: 'number', min: 90, max: 110 },
+            'Heart Rate': { label: 'Enter new heart rate (BPM)', type: 'number', min: 40, max: 200 },
+            'Sleep': { label: 'Enter hours of sleep', type: 'number', min: 0, max: 24 }
+        };
+
+        // Initialize metric cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach(card => {
+                const updateBtn = card.querySelector('.update-metric-btn');
+                if (updateBtn) {
+                    updateBtn.onclick = () => showMetricUpdateModal(card);
+                }
+            });
+        });
+
+        function showMetricUpdateModal(card) {
+            currentMetricCard = card;
+            const name = card.querySelector('.metric-name').textContent;
+            const value = card.querySelector('.metric-value').textContent.replace(/[^\d.]/g, '');
+            document.getElementById('metricUpdateTitle').textContent = `Update ${name}`;
+            document.getElementById('metricValueLabel').textContent = metricTypes[name]?.label || 'Enter new value';
+            const input = document.getElementById('metricValue');
+            input.value = value;
+            document.getElementById('metricNote').value = '';
+            document.getElementById('metricUpdateModal').style.display = 'block';
+        }
+
+        function closeMetricUpdateModal() {
+            document.getElementById('metricUpdateModal').style.display = 'none';
+            currentMetricCard = null;
+        }
+
+        function saveMetricUpdate(e) {
+            e.preventDefault();
+            if (!currentMetricCard) return;
+            
+            const value = document.getElementById('metricValue').value;
+            const note = document.getElementById('metricNote').value;
+            const name = currentMetricCard.querySelector('.metric-name').textContent;
+            
+            // Validate input
+            const type = metricTypes[name]?.type;
+            const min = metricTypes[name]?.min;
+            const max = metricTypes[name]?.max;
+            
+            if (type === 'number') {
+                const num = parseFloat(value);
+                if (isNaN(num) || (min && num < min) || (max && num > max)) {
+                    alert(`Please enter a valid value for ${name}.`);
+                    return;
+                }
+            }
+            
+            // Update the metric value in the card
+            const valueElement = currentMetricCard.querySelector('.metric-value');
+            const formattedValue = formatMetricValue(name, value);
+            valueElement.textContent = formattedValue;
+            
+            // Update the last updated date
+            const dateElement = currentMetricCard.querySelector('.metric-date');
+            dateElement.textContent = 'Last updated: Today';
+            
+            // Save to localStorage
+            const metrics = JSON.parse(localStorage.getItem('metrics') || '{}');
+            metrics[name] = {
+                value: value,
+                note: note,
+                date: new Date().toISOString()
+            };
+            localStorage.setItem('metrics', JSON.stringify(metrics));
+            
+            // Close the modal
+            closeMetricUpdateModal();
+            
+            // Show success message
+            showToast('Metric updated successfully');
+        }
+
+        function formatMetricValue(name, value) {
+            if (name === 'Weight') return `${value} lbs`;
+            if (name === 'Temperature') return `${value} °F`;
+            if (name === 'Heart Rate') return `${value} BPM`;
+            if (name === 'Sleep') return `${value} hours`;
+            return value;
+        }
+
+        // Initialize metric cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const metricCards = document.querySelectorAll('.metric-card');
+            metricCards.forEach(card => {
+                const updateBtn = card.querySelector('.update-metric-btn');
+                if (updateBtn) {
+                    updateBtn.onclick = () => showMetricUpdateModal(card);
+                }
+            });
+        });
+
+        // Show toast for metrics
+        function showMetricToast() {
+            let toast = document.getElementById('metricToast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'metricToast';
+                toast.className = 'toast';
+                toast.textContent = 'Metric updated successfully!';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = 'Metric updated successfully!';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        // Update health summary cards based on metricData
+        function updateHealthSummary() {
+            // Example: update Activity Level, Sleep, etc. (customize as needed)
+            // For demo, update the Sleep health card meter and text
+            const sleepCard = document.querySelector('.health-card .fa-running')?.closest('.health-card');
+            if (sleepCard) {
+                let sleep = metricData['Sleep'];
+                let percent = Math.min(100, Math.max(0, (sleep / 8) * 100));
+                sleepCard.querySelector('.meter-fill').style.width = percent + '%';
+                sleepCard.querySelector('.health-info p').textContent = sleep >= 7 ? 'Good activity level' : 'Try to get more sleep';
+            }
+            // You can add more logic for other metrics and summary cards as needed
+        }
+
+        // Handle Period Tracking Functions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if we need to show the period history modal (first time setup)
+            const hasTrackedPeriods = localStorage.getItem('calendarState');
+            if (!hasTrackedPeriods) {
+                // Show period history modal after a short delay
+                setTimeout(() => {
+                    openModal('periodHistoryModal');
+                }, 1000);
+            }
+            
+            // Add click handler to period track button
+            const periodTrackBtn = document.getElementById('periodTrackBtn');
+            if (periodTrackBtn) {
+                periodTrackBtn.addEventListener('click', function() {
+                    const isTracking = this.classList.contains('active');
+                    
+                    if (isTracking) {
+                        // Turn off tracking mode
+                        this.classList.remove('active');
+                        this.innerHTML = '<i class="fas fa-plus"></i> Track Period';
+                        document.querySelectorAll('.date').forEach(date => {
+                            date.classList.remove('tracking-mode');
+                        });
+                        showToast('Period tracking mode disabled');
+                    } else {
+                        // Turn on tracking mode
+                        this.classList.add('active');
+                        this.innerHTML = '<i class="fas fa-check"></i> Done Tracking';
+                        document.querySelectorAll('.date').forEach(date => {
+                            date.classList.add('tracking-mode');
+                        });
+                        showToast('Select days on the calendar to mark your period');
+                    }
+                });
+            }
+        });
+        
+        // Save period history from modal
+        // (Function removed as modal is deleted)
+        
+        // Generic function to open any modal
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'flex';
+                
+                // If opening the symptom tracker, set the current date
+                if (modalId === 'symptomTrackerModal') {
+                    const today = new Date();
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    const currentDateElement = document.getElementById('currentDate');
+                    if (currentDateElement) {
+                        currentDateElement.textContent = today.toLocaleDateString('en-US', options);
+                    }
+                }
+            }
+        }
+        
+        // Close modal function
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Replace the existing scrollspy implementation with a more reliable version
+        function initScrollspy() {
+            // Get all the navigation items
+            const sidebarNavItems = document.querySelectorAll('.sidebar-nav ul li');
+            const bottomNavItems = document.querySelectorAll('.bottom-nav ul li');
+            
+            // Get all sections by their IDs
+            const sections = [
+                { id: 'home', element: document.querySelector('.dashboard-header') },
+                { id: 'insights', element: document.querySelector('.insights-section') },
+                { id: 'log', element: document.querySelector('.todays-log') },
+                { id: 'calendar', element: document.querySelector('.calendar-mini') }
+            ];
+            
+            // Make sure the elements exist and add IDs if needed
+            sections.forEach(section => {
+                if (section.element && section.id !== 'home') { 
+                    section.element.id = section.id;
+                }
+            });
+            
+            // Set a global flag to enable/disable scrollspy
+            window.scrollSpyEnabled = true;
+            
+            // Function to get the current section based on scroll position
+            function getCurrentSection() {
+                // If scrolling is very close to top, always select home
+                if (window.scrollY < 100) {
+                    return 'home';
+                }
+                
+                // Get current scroll position with a small offset
+                const scrollPosition = window.scrollY + 150;
+                
+                // Find which section we're currently in
+                let currentSection = 'home'; // Default to home
+                
+                for (let i = sections.length - 1; i >= 0; i--) {
+                    const section = sections[i];
+                    if (!section.element) continue;
+                    
+                    const sectionTop = section.element.offsetTop;
+                    
+                    if (scrollPosition >= sectionTop) {
+                        currentSection = section.id;
+                        break;
+                    }
+                }
+                
+                return currentSection;
+            }
+            
+            // Function to update the active navigation items
+            function updateNavigation() {
+                // Skip if scrollspy is disabled (during manual navigation)
+                if (!window.scrollSpyEnabled) return;
+                
+                const currentSection = getCurrentSection();
+                
+                // Update sidebar navigation
+                sidebarNavItems.forEach(item => {
+                    const link = item.querySelector('a');
+                    if (link && link.getAttribute('href') === `#${currentSection}`) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // Update bottom navigation
+                bottomNavItems.forEach(item => {
+                    const link = item.querySelector('a');
+                    if (link && link.getAttribute('href') === `#${currentSection}`) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Throttle function to limit how often the scroll handler runs
+            function throttle(func, delay) {
+                let lastCall = 0;
+                return function() {
+                    const now = new Date().getTime();
+                    if (now - lastCall < delay) {
+                        return;
+                    }
+                    lastCall = now;
+                    return func.apply(this, arguments);
+                };
+            }
+            
+            // Use throttling instead of debounce for smoother scrollspy updates
+            const throttledUpdateNavigation = throttle(updateNavigation, 100);
+            
+            // Add scroll event listener
+            window.addEventListener('scroll', throttledUpdateNavigation, { passive: true });
+            
+            // Add resize event listener to recalculate section positions
+            window.addEventListener('resize', throttledUpdateNavigation, { passive: true });
+            
+            // Initial call to set the correct navigation
+            updateNavigation();
+            
+            // Update navigation click handlers
+            function setupNavigationClicks() {
+                // Desktop Sidebar Navigation
+                const sidebarLinks = document.querySelectorAll('.sidebar-nav ul li a');
+                sidebarLinks.forEach(link => {
+                    link.onclick = function(e) {
+                        e.preventDefault();
+                        
+                        // Remove active class from all items
+                        document.querySelectorAll('.sidebar-nav ul li, .bottom-nav ul li').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        
+                        // Add active class to this item
+                        this.parentElement.classList.add('active');
+                        
+                        // Get the target section ID
+                        const targetId = this.getAttribute('href').substring(1);
+                        
+                        // Temporarily disable scrollspy
+                        window.scrollSpyEnabled = false;
+                        
+                        // Scroll to the appropriate location
+                        if (targetId === 'home') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                            const targetSection = document.getElementById(targetId);
+                            if (targetSection) {
+                                targetSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                        
+                        // Re-enable scrollspy after animation completes
+                        setTimeout(() => {
+                            window.scrollSpyEnabled = true;
+                        }, 1000);
+                    };
+                });
+                
+                // Mobile Bottom Navigation
+                const bottomNavLinks = document.querySelectorAll('.bottom-nav ul li a');
+                bottomNavLinks.forEach(link => {
+                    link.onclick = function(e) {
+                        e.preventDefault();
+                        
+                        // Remove active class from all items
+                        document.querySelectorAll('.sidebar-nav ul li, .bottom-nav ul li').forEach(item => {
+                            item.classList.remove('active');
+                        });
+                        
+                        // Add active class to this item
+                        this.parentElement.classList.add('active');
+                        
+                        // Get the target section ID
+                        const targetId = this.getAttribute('href').substring(1);
+                        
+                        // Temporarily disable scrollspy
+                        window.scrollSpyEnabled = false;
+                        
+                        // Scroll to the appropriate location
+                        if (targetId === 'home') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                            const targetSection = document.getElementById(targetId);
+                            if (targetSection) {
+                                targetSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }
+                        
+                        // Re-enable scrollspy after animation completes
+                        setTimeout(() => {
+                            window.scrollSpyEnabled = true;
+                        }, 1000);
+                    };
+                });
+            }
+            
+            // Setup navigation click handlers
+            setupNavigationClicks();
+        }
+
+        // Ensure we initialize scrollspy on DOM content loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize scrollspy
+            initScrollspy();
+        });
+
+        // Function to initialize weight feature and load existing data
+        function loadExistingWeightData() {
+            const weightDataStr = localStorage.getItem('weightData');
+            const weightDisplayContainer = document.getElementById('weightDisplayContainer');
+            
+            if (weightDataStr && weightDisplayContainer) {
+                try {
+                    const weightData = JSON.parse(weightDataStr);
+                    if (weightData && weightData.value) {
+                        // Update weight display in Today's Log section
+                        weightDisplayContainer.innerHTML = `
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <div id="weightValue" style="font-size: 2.5rem; font-weight: bold; color: #333;">${weightData.value}</div>
+                                <div style="color: #777; font-size: 0.9rem;">lbs</div>
+                            </div>
+                        `;
+                    }
+                } catch (e) {
+                    console.error('Error loading weight data:', e);
+                }
+            }
+        }
+
+        // Add loadExistingWeightData to document ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize symptom cards
+            initSymptomCards();
+            
+            // Load weight data
+            loadExistingWeightData();
+            
+            // Add click handler for the symptom tracker modal which now includes weight tracking
+            const modal = document.getElementById('symptomTrackerModal');
+            if (modal) {
+                const weightInput = modal.querySelector('#weightInput');
+                if (weightInput) {
+                    // Pre-fill with existing data
+                    const weightDataStr = localStorage.getItem('weightData');
+                    if (weightDataStr) {
+                        try {
+                            const weightData = JSON.parse(weightDataStr);
+                            if (weightData && weightData.value) {
+                                weightInput.value = weightData.value;
+                            }
+                        } catch (e) {
+                            console.error('Error initializing weight input:', e);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update Weight Modal header to match color scheme
+        function showWeightModal(event) {
+            // Prevent the click from propagating to the parent card
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            const modal = document.getElementById('weightModal');
+            
+            // Update header style to match the weight card color
+            const modalHeader = modal.querySelector('.modal-header');
+            if (modalHeader) {
+                modalHeader.style.backgroundColor = '#5f246d';
+                modalHeader.style.color = 'white';
+                
+                const headerTitle = modalHeader.querySelector('h2');
+                if (headerTitle) {
+                    headerTitle.style.color = 'white';
+                }
+                
+                const closeButton = modalHeader.querySelector('.close-modal');
+                if (closeButton) {
+                    closeButton.style.color = 'white';
+                }
+            }
+            
+            // Set today's date
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('weightCurrentDate').textContent = today.toLocaleDateString('en-US', options);
+            
+            // Set current weight value if it exists
+            const currentWeight = document.getElementById('weightValue') ? 
+                document.getElementById('weightValue').textContent : '';
+            document.getElementById('weightInput').value = currentWeight;
+            
+            // Clear notes
+            document.getElementById('weightNote').value = '';
+            
+            // Show modal
+            modal.style.display = 'flex';
+        }
+
+        function deleteSymptoms() {
+            // Clear symptoms from localStorage
+            localStorage.removeItem('symptomData');
+            // Reset the Symptoms card display
+            const iconContainer = document.getElementById('symptomsIconContainer');
+            if (iconContainer) {
+                iconContainer.innerHTML = '<p style="color: #777; text-align: center;">No symptoms logged yet</p>';
+                iconContainer.style.justifyContent = 'center';
+            }
+            // Remove badge if present
+            const symptomsCard = document.querySelector('.log-card[style*="border: 2px solid #ee6aa7"]');
+            if (symptomsCard) {
+                const headerDiv = symptomsCard.querySelector('div[style*="background-color: #ee6aa7"]');
+                if (headerDiv) {
+                    let badge = headerDiv.querySelector('.symptom-count-badge');
+                    if (badge) badge.remove();
+                }
+                // Disable the trash button affordance
+                const trashBtn = symptomsCard.querySelector('.trash-btn');
+                if (trashBtn) {
+                    trashBtn.classList.add('disabled');
+                    trashBtn.disabled = true;
+                }
+            }
+        }
+
+        function deleteWeight() {
+            // Clear weight from localStorage
+            localStorage.removeItem('weightData');
+            // Reset the Weight card display
+            const weightDisplayContainer = document.getElementById('weightDisplayContainer');
+            if (weightDisplayContainer) {
+                weightDisplayContainer.innerHTML = '<p style="color: #777; text-align: center;">No weight logged yet</p>';
+            }
+            // Disable the trash button affordance
+            const weightCard = document.querySelector('.log-card[style*="border: 2px solid #5f246d"]');
+            if (weightCard) {
+                const trashBtn = weightCard.querySelector('.trash-btn');
+                if (trashBtn) {
+                    trashBtn.classList.add('disabled');
+                    trashBtn.disabled = true;
+                }
+            }
+        }
+
+        // Add interactivity and sync for Health Profile in My Profile modal
+        function loadHealthProfile() {
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === currentUser) || {};
+            const healthProfile = JSON.parse(localStorage.getItem('healthProfile') || '{}');
+
+            // Use healthProfile values if available, else fallback to user object
+            const birthdate = user.birthdate || healthProfile.birthdate || '';
+            const periodLength = user.periodLength || healthProfile.periodLength || '';
+            const cycleLength = user.cycleLength || healthProfile.cycleLength || '';
+
+            document.querySelector('.detail-value[data-field="email"]').textContent = user.email || '';
+            document.querySelector('.detail-value[data-field="birthdate"]').textContent = birthdate ? formatDate(birthdate) : '';
+            document.querySelector('.detail-value[data-field="periodLength"]').textContent = periodLength ? periodLength + ' days' : '';
+            document.querySelector('.detail-value[data-field="cycleLength"]').textContent = cycleLength ? cycleLengthLabel(cycleLength) : '';
+        }
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            if (isNaN(d)) return dateStr;
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        function cycleLengthLabel(val) {
+            if (val === '21-25') return '21-25 days';
+            if (val === '26-30') return '26-30 days';
+            if (val === '31-35') return '31-35 days';
+            if (val === 'irregular') return 'Irregular';
+            return val;
+        }
+        function enableHealthProfileEdit(field) {
+            // Revert any other field in edit mode
+            document.querySelectorAll('.detail-value[data-editing="true"]').forEach(div => {
+                if (div.getAttribute('data-field') !== field) {
+                    const currentUser = localStorage.getItem('currentUser');
+                    const users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const user = users.find(u => u.email === currentUser) || {};
+                    let val = '';
+                    if (div.getAttribute('data-field') === 'birthdate') val = formatDate(user.birthdate);
+                    else if (div.getAttribute('data-field') === 'periodLength') val = user.periodLength ? user.periodLength + ' days' : '';
+                    else if (div.getAttribute('data-field') === 'cycleLength') val = user.cycleLength ? cycleLengthLabel(user.cycleLength) : '';
+                    div.textContent = val;
+                    const editBtn = div.nextElementSibling;
+                    if (editBtn) editBtn.style.display = '';
+                    div.removeAttribute('data-editing');
+                }
+            });
+
+            const valueDiv = document.querySelector(`.detail-value[data-field='${field}']`);
+            const editBtn = valueDiv.nextElementSibling;
+            if (!valueDiv || !editBtn) return;
+
+            // Get value from user object, not from textContent (which may be blank)
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === currentUser) || {};
+            let currentValue = '';
+            if (field === 'birthdate') currentValue = user.birthdate || '';
+            else if (field === 'periodLength') currentValue = user.periodLength || '';
+            else if (field === 'cycleLength') currentValue = user.cycleLength || '';
+            else currentValue = valueDiv.textContent.replace(' days', '').trim();
+
+            let inputType = 'text';
+            let inputHtml = '';
+
+            if (field === 'birthdate') {
+                inputType = 'date';
+                const date = new Date(currentValue);
+                const formattedDate = date instanceof Date && !isNaN(date) ? 
+                    date.toISOString().split('T')[0] : '';
+                inputHtml = `<input type='${inputType}' value='${formattedDate}' class='profile-input' />`;
+            } else if (field === 'periodLength') {
+                inputHtml = `<input type='number' value='${currentValue}' min='1' max='10' class='profile-input' />`;
+            } else if (field === 'cycleLength') {
+                inputHtml = `
+                    <select class="profile-input">
+                        <option value="21-25" ${currentValue === '21-25' ? 'selected' : ''}>21-25 days</option>
+                        <option value="26-30" ${currentValue === '26-30' ? 'selected' : ''}>26-30 days</option>
+                        <option value="31-35" ${currentValue === '31-35' ? 'selected' : ''}>31-35 days</option>
+                        <option value="irregular" ${currentValue === 'irregular' ? 'selected' : ''}>Irregular</option>
+                    </select>
+                `;
+            } else {
+                inputHtml = `<input type='${inputType}' value='${currentValue}' class='profile-input' />`;
+            }
+            valueDiv.innerHTML = inputHtml;
+            editBtn.style.display = 'none';
+            valueDiv.querySelector('input,select').focus();
+            valueDiv.setAttribute('data-editing', 'true');
+        }
+
+        // 2. Save all changes with the main Save button
+        function saveProfileChanges() {
+            const currentUser = localStorage.getItem('currentUser');
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.email === currentUser);
+            if (userIndex === -1) return;
+            let user = users[userIndex];
+            let updated = false;
+            // Get edited fields
+            const birthdateDiv = document.querySelector('.detail-value[data-field="birthdate"]');
+            const periodLengthDiv = document.querySelector('.detail-value[data-field="periodLength"]');
+            const cycleLengthDiv = document.querySelector('.detail-value[data-field="cycleLength"]');
+            // Also update healthProfile
+            let healthProfile = JSON.parse(localStorage.getItem('healthProfile') || '{}');
+            // Save any open edits before closing
+            [birthdateDiv, periodLengthDiv, cycleLengthDiv].forEach(div => {
+                if (div && div.hasAttribute('data-editing')) {
+                    const field = div.getAttribute('data-field');
+                    let val = '';
+                    if (field === 'birthdate' && div.querySelector('input')) {
+                        val = div.querySelector('input').value;
+                        if (val && val !== user.birthdate) {
+                            user.birthdate = val;
+                            healthProfile.birthdate = val;
+                            updated = true;
+                        }
+                        div.textContent = formatDate(val);
+                    } else if (field === 'periodLength' && div.querySelector('input')) {
+                        val = div.querySelector('input').value;
+                        if (val && val !== user.periodLength) {
+                            user.periodLength = val;
+                            healthProfile.periodLength = val;
+                            updated = true;
+                        }
+                        div.textContent = val ? val + ' days' : '';
+                    } else if (field === 'cycleLength' && div.querySelector('select')) {
+                        val = div.querySelector('select').value;
+                        if (val && val !== user.cycleLength) {
+                            user.cycleLength = val;
+                            healthProfile.cycleLength = val;
+                            updated = true;
+                        }
+                        div.textContent = val ? cycleLengthLabel(val) : '';
+                    }
+                    div.nextElementSibling.style.display = '';
+                    div.removeAttribute('data-editing');
+                }
+            });
+            // Save if updated
+            if (updated) {
+                users[userIndex] = user;
+                localStorage.setItem('users', JSON.stringify(users));
+                localStorage.setItem('healthProfile', JSON.stringify(healthProfile));
+                showToast('Profile updated successfully!');
+                updateGreeting();
+                // Update sidebar name
+                const sidebarName = document.querySelector('.profile-name');
+                if (sidebarName) sidebarName.textContent = user.name || '';
+            } else {
+                showToast('No changes to save.');
+            }
+            // Always close the modal after saving
+            const modal = document.getElementById('profileModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        // 3. Make Save button only enabled if any field is being edited
+        function checkProfileEdits() {
+            // The Save button should always be enabled
+            // document.getElementById('saveProfileBtn').disabled = false;
+        }
+        document.addEventListener('input', checkProfileEdits);
+        document.addEventListener('click', function(e) {
+            // If click outside an editing field, save the new value (if changed)
+            document.querySelectorAll('.detail-value[data-editing="true"]').forEach(div => {
+                if (!div.contains(e.target) && !div.nextElementSibling.contains(e.target)) {
+                    const field = div.getAttribute('data-field');
+                    const currentUser = localStorage.getItem('currentUser');
+                    let users = JSON.parse(localStorage.getItem('users') || '[]');
+                    const userIndex = users.findIndex(u => u.email === currentUser);
+                    if (userIndex === -1) return;
+                    let user = users[userIndex];
+                    let healthProfile = JSON.parse(localStorage.getItem('healthProfile') || '{}');
+                    let updated = false;
+                    let val = '';
+                    if (field === 'birthdate' && div.querySelector('input')) {
+                        val = div.querySelector('input').value;
+                        if (val && val !== user.birthdate) {
+                            user.birthdate = val;
+                            healthProfile.birthdate = val;
+                            updated = true;
+                        }
+                        div.textContent = formatDate(val);
+                    } else if (field === 'periodLength' && div.querySelector('input')) {
+                        val = div.querySelector('input').value;
+                        if (val && val !== user.periodLength) {
+                            user.periodLength = val;
+                            healthProfile.periodLength = val;
+                            updated = true;
+                        }
+                        div.textContent = val ? val + ' days' : '';
+                    } else if (field === 'cycleLength' && div.querySelector('select')) {
+                        val = div.querySelector('select').value;
+                        if (val && val !== user.cycleLength) {
+                            user.cycleLength = val;
+                            healthProfile.cycleLength = val;
+                            updated = true;
+                        }
+                        div.textContent = val ? cycleLengthLabel(val) : '';
+                    } else {
+                        // fallback: just restore
+                        if (field === 'birthdate') val = formatDate(user.birthdate);
+                        else if (field === 'periodLength') val = user.periodLength ? user.periodLength + ' days' : '';
+                        else if (field === 'cycleLength') val = user.cycleLength ? cycleLengthLabel(user.cycleLength) : '';
+                        div.textContent = val;
+                    }
+                    if (updated) {
+                        users[userIndex] = user;
+                        localStorage.setItem('users', JSON.stringify(users));
+                        localStorage.setItem('healthProfile', JSON.stringify(healthProfile));
+                        updateGreeting();
+                        const sidebarName = document.querySelector('.profile-name');
+                        if (sidebarName) sidebarName.textContent = user.name || '';
+                    }
+                    div.nextElementSibling.style.display = '';
+                    div.removeAttribute('data-editing');
+                    checkProfileEdits();
+                }
+            });
+        });
+
+        function increasePeriodLength() {
+            const input = document.querySelector('.detail-value[data-field="periodLength"] input');
+            if (input && parseInt(input.value) < 10) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+        function decreasePeriodLength() {
+            const input = document.querySelector('.detail-value[data-field="periodLength"] input');
+            if (input && parseInt(input.value) > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+        function showValidationError(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast error';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        function attachHealthProfileEditListeners() {
+            document.querySelectorAll('.detail-value').forEach(div => {
+                const field = div.getAttribute('data-field');
+                if (["birthdate", "periodLength", "cycleLength"].includes(field)) {
+                    const editBtn = div.nextElementSibling;
+                    if (editBtn) {
+                        editBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            enableHealthProfileEdit(field);
+                        };
+                    }
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHealthProfile();
+            attachHealthProfileEditListeners();
+            var saveBtn = document.getElementById('saveProfileBtn');
+            if (saveBtn) {
+                saveBtn.onclick = saveProfileChanges;
+            }
+        });
+
+        // Add showProfileModal function
+        function showProfileModal() {
+            const modal = document.getElementById('profileModal');
+            if (modal) {
+                // Get current user data
+                const currentUser = localStorage.getItem('currentUser');
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === currentUser);
+                
+                // Update profile information if user exists
+                if (user) {
+                    const profileName = modal.querySelector('.profile-name-large');
+                    if (profileName) profileName.textContent = user.name || '';
+                    
+                    // Update other profile details
+                    const emailValue = modal.querySelector('.detail-value[data-field="email"]');
+                    if (emailValue) emailValue.textContent = user.email || '';
+                    
+                    const birthdateValue = modal.querySelector('.detail-value[data-field="birthdate"]');
+                    if (birthdateValue) birthdateValue.textContent = formatDate(user.birthdate) || '';
+                    
+                    const periodLengthValue = modal.querySelector('.detail-value[data-field="periodLength"]');
+                    if (periodLengthValue) periodLengthValue.textContent = (user.periodLength || '') + ' days';
+                    
+                    const cycleLengthValue = modal.querySelector('.detail-value[data-field="cycleLength"]');
+                    if (cycleLengthValue) cycleLengthValue.textContent = cycleLengthLabel(user.cycleLength) || '';
+                }
+                
+                modal.style.display = 'flex';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set sidebar name to current user's name
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === currentUser);
+            if (user) {
+                const sidebarName = document.querySelector('.profile-name');
+                if (sidebarName) sidebarName.textContent = user.name || '';
+            }
+            // Make 'View profile' clickable robustly
+            const viewProfile = document.querySelector('.profile-settings');
+            if (viewProfile) {
+                viewProfile.setAttribute('onclick', 'showProfileModal()');
+                viewProfile.style.pointerEvents = 'auto';
+                viewProfile.style.cursor = 'pointer';
+                viewProfile.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showProfileModal();
+                });
+            }
+        });
+
+        // Save notification settings
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveBtn = document.getElementById('saveNotificationsBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function() {
+                    const periodReminders = document.getElementById('periodReminders').checked;
+                    const fertilityAlerts = document.getElementById('fertilityAlerts').checked;
+                    let notificationSettings = {
+                        periodReminders,
+                        fertilityAlerts
+                    };
+                    localStorage.setItem('notificationSettings', JSON.stringify(notificationSettings));
+                    showToast('Notification settings saved!');
+                });
+            }
+            // Load notification settings on modal open
+            const notificationSettings = JSON.parse(localStorage.getItem('notificationSettings') || '{}');
+            if (notificationSettings) {
+                if (typeof notificationSettings.periodReminders !== 'undefined') {
+                    document.getElementById('periodReminders').checked = notificationSettings.periodReminders;
+                }
+                if (typeof notificationSettings.fertilityAlerts !== 'undefined') {
+                    document.getElementById('fertilityAlerts').checked = notificationSettings.fertilityAlerts;
+                }
+            }
+        });
+
+        function updateGreeting() {
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === currentUser);
+            if (user && document.getElementById('greeting')) {
+                document.getElementById('greeting').textContent = `Hello, ${user.name}!`;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', updateGreeting);
+        // Also call updateGreeting after profile save if needed
+
+        document.querySelectorAll('.profile-settings').forEach(function(viewProfile) {
+            viewProfile.setAttribute('onclick', 'showProfileModal()');
+            viewProfile.style.pointerEvents = 'auto';
+            viewProfile.style.cursor = 'pointer';
+            viewProfile.addEventListener('click', function(e) {
+                e.preventDefault();
+                showProfileModal();
+            });
+        });
+
+        function syncCards() {
+            // Get all cards
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                // Your sync logic here
+            });
+        }
+    </script>
+    <script src="calendar.js"></script>
+
+    <!-- Add saveProfileChanges function -->
+    <script>
+        function saveProfileChanges() {
+            // Get current user data
+            const currentUser = localStorage.getItem('currentUser');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userIndex = users.findIndex(u => u.email === currentUser);
+            
+            if (userIndex !== -1) {
+                // Get all editable fields
+                const modal = document.getElementById('profileModal');
+                const emailValue = modal.querySelector('.detail-value[data-field="email"]').textContent;
+                const birthdateValue = modal.querySelector('.detail-value[data-field="birthdate"]').textContent;
+                const periodLengthValue = modal.querySelector('.detail-value[data-field="periodLength"]').textContent.replace(' days', '');
+                const cycleLengthValue = modal.querySelector('.detail-value[data-field="cycleLength"]').textContent;
+                
+                // Update user data
+                users[userIndex] = {
+                    ...users[userIndex],
+                    email: emailValue,
+                    birthdate: birthdateValue,
+                    periodLength: periodLengthValue,
+                    cycleLength: cycleLengthValue
+                };
+                
+                // Save back to localStorage
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Save notification preferences
+                const periodReminders = modal.querySelector('input[type="checkbox"]').checked;
+                const fertilityAlerts = modal.querySelectorAll('input[type="checkbox"]')[1].checked;
+                
+                const preferences = {
+                    periodReminders,
+                    fertilityAlerts
+                };
+                localStorage.setItem('userPreferences', JSON.stringify(preferences));
+                
+                // Show success message
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = 'Profile updated successfully!';
+                document.body.appendChild(toast);
+                
+                // Show the toast
+                setTimeout(() => toast.classList.add('show'), 100);
+                
+                // Hide the toast after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+                
+                // Close the modal
+                document.getElementById('profileModal').style.display = 'none';
+            }
+            updateGreeting();
+        }
+    </script>
+</body>
+</html> 

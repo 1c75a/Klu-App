@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading - Klu Health</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="Klu Logo.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fce6ef 0%, #fff 100%);
+            overflow: hidden;
+        }
+        
+        .loading-container {
+            text-align: center;
+        }
+        
+        .logo {
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        .logo img {
+            height: 100px;
+            width: auto;
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .loading-message {
+            position: absolute;
+            bottom: 2rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        /* Progress bar animation */
+        .redirect-progress {
+            width: 200px;
+            height: 4px;
+            background-color: rgba(238, 106, 167, 0.2);
+            border-radius: 4px;
+            margin: 1rem auto;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-color);
+            border-radius: 4px;
+            animation: progress 3s linear forwards;
+        }
+        
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="logo">
+            <img src="Klu Logo.png" alt="Klu Logo" style="height: 140px; width: auto;">
+        </div>
+        <p class="loading-text">Setting up your personal health assistant...</p>
+        <div class="redirect-progress">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+    
+    <div class="loading-message">
+        <p>Klu is personalizing your experience</p>
+    </div>
+
+    <script>
+        // Redirect to the survey page after 3 seconds
+        setTimeout(function() {
+            window.location.href = "survey.html";
+        }, 3000);
+    </script>
+</body>
+</html> 

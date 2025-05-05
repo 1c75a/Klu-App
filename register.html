@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Klu Health</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="Klu Logo.png">
+    <style>
+        /* Additional styles to fix shakiness */
+        body.auth-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #faf0f5;
+        }
+        
+        .auth-container {
+            min-height: 620px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 450px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem 2rem;
+            box-sizing: border-box;
+            margin: 1rem;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .auth-logo {
+            margin-bottom: 1.5rem;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .auth-logo img {
+            height: 140px;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .auth-container h1 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            line-height: 1.2;
+        }
+        
+        .auth-subtitle {
+            color: var(--text-color);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.4;
+        }
+        
+        .auth-form {
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+            min-height: 85px;
+            position: relative;
+            width: 100%;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+        
+        .form-group input {
+            height: 48px;
+            width: 100%;
+            padding: 0 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-group {
+            min-height: 24px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+            height: auto;
+            margin-top: 0.2rem;
+            margin-right: 0.5rem;
+        }
+        
+        .checkbox-group label {
+            font-weight: normal;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        
+        .social-btn {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        /* Fix for button jumps */
+        .auth-btn {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 0;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            font-size: 1rem;
+            margin-top: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .auth-btn:hover {
+            background-color: #e05a97;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Fix for password toggle alignment */
+        .password-input {
+            position: relative;
+            height: 48px;
+        }
+        
+        .password-input input {
+            padding-right: 40px;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 20px;
+            width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+        
+        .password-hint {
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+        
+        .auth-divider {
+            position: relative;
+            margin: 2rem 0;
+            text-align: center;
+            width: 100%;
+            height: 20px;
+        }
+        
+        .auth-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .auth-divider span {
+            position: relative;
+            background: white;
+            padding: 0 1rem;
+            font-size: 0.9rem;
+            color: #777;
+            z-index: 2;
+        }
+        
+        .social-auth {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+        
+        .auth-redirect {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1rem;
+            margin-bottom: 0;
+        }
+        
+        /* Date input styling */
+        .date-input {
+            width: 100%;
+            padding: 0 1rem;
+            height: 48px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23444444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: calc(100% - 12px) center;
+            background-size: 20px;
+            padding-right: 40px;
+            position: relative;
+            background-color: white;
+        }
+        
+        .date-input:hover {
+            border-color: #ee6aa7;
+            box-shadow: 0 2px 5px rgba(238, 106, 167, 0.1);
+            transform: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23ee6aa7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+        }
+        
+        .date-input:focus {
+            outline: none;
+            border-color: #ee6aa7;
+            box-shadow: 0 2px 8px rgba(238, 106, 167, 0.2);
+        }
+        
+        .date-input::placeholder {
+            color: #a0a0a0;
+            opacity: 1;
+        }
+        
+        /* For Microsoft Edge */
+        .date-input::-ms-input-placeholder {
+            color: #a0a0a0;
+        }
+        
+        /* For Internet Explorer */
+        .date-input:-ms-input-placeholder {
+            color: #a0a0a0;
+        }
+        
+        /* Hide the default calendar icon in some browsers */
+        .date-input::-webkit-calendar-picker-indicator {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        
+        /* Custom Calendar UI */
+        .calendar-wrapper {
+            display: none;
+            position: fixed; /* Use fixed positioning to prevent page jumps */
+            width: 300px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            overflow: visible;
+            border: 1px solid #f0f0f0;
+            will-change: transform; /* Optimize for animations */
+            transform: translateZ(0); /* Force GPU acceleration */
+            backface-visibility: hidden; /* Further optimization */
+        }
+        
+        .calendar-wrapper.left-arrow::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 165px; /* Position to align with the calendar icon height */
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid white;
+            filter: drop-shadow(-3px 0px 2px rgba(0, 0, 0, 0.1));
+        }
+        
+        .calendar-wrapper.bottom-arrow::after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            bottom: -10px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+            filter: drop-shadow(0px 3px 2px rgba(0, 0, 0, 0.1));
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8f0f5;
+            padding: 15px;
+        }
+        
+        .calendar-title {
+            font-weight: 600;
+            color: #ee6aa7;
+            display: flex;
+            align-items: center;
+        }
+        
+        .month-select-wrapper {
+            position: relative;
+            margin-right: 15px;
+        }
+        
+        .calendar-title select {
+            border: none;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #fdefef;
+            font-weight: 600;
+            color: #ee6aa7;
+            padding: 5px 30px 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            min-width: 110px;
+        }
+        
+        .month-select-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #ee6aa7;
+            pointer-events: none;
+        }
+        
+        .calendar-title select:focus {
+            outline: none;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .calendar-nav button {
+            background: none;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #444;
+            font-size: 18px;
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+        
+        .calendar-nav button:hover {
+            background-color: rgba(238, 106, 167, 0.1);
+            color: #ee6aa7;
+        }
+        
+        .calendar-grid {
+            padding: 15px;
+        }
+        
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            color: #555;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-gap: 8px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            color: #444;
+            transition: all 0.2s ease;
+        }
+        
+        .calendar-day:hover {
+            background-color: #f8f0f5;
+        }
+        
+        .calendar-day.active {
+            background-color: #ee6aa7;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.other-month {
+            color: #aaa;
+        }
+        
+        .calendar-footer {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .calendar-footer button {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-cancel {
+            background-color: white;
+            color: var(--primary-color);
+            border: 1px solid #ee6aa7;
+            font-weight: 600;
+        }
+        
+        .btn-cancel:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: none;
+        }
+        
+        .btn-apply {
+            background-color: #ee6aa7;
+            color: white;
+        }
+        
+        .btn-apply:hover {
+            background-color: #e05a97;
+        }
+        
+        .years-list {
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            background: white;
+            position: absolute;
+            width: 120px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1100;
+            right: 10px;
+            top: 45px;
+        }
+        
+        .years-list div {
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .years-list div:hover {
+            background-color: #f8f0f5;
+        }
+        
+        .years-list div.selected {
+            background-color: #ee6aa7;
+            color: white;
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-logo">
+            <img src="Klu Logo.png" alt="Klu Logo">
+        </div>
+        <h1>Create an account</h1>
+        <p class="auth-subtitle">Join millions of women tracking their health with Klu</p>
+        
+        <form class="auth-form" onsubmit="signupUser(event)">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="birthdate">Date of Birth</label>
+                <input type="date" id="birthdate" class="date-input" placeholder="Select your birth date" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-input">
+                    <input type="password" id="password" placeholder="Create a password" required>
+                    <i class="fas fa-eye-slash toggle-password" onclick="togglePasswordVisibility()"></i>
+                </div>
+                <p class="password-hint">Must be at least 8 characters with a mix of letters, numbers & symbols</p>
+            </div>
+            <div class="form-group" style="min-height: 40px;">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">I agree to Klu's <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                </div>
+            </div>
+            <button type="submit" class="auth-btn">Create account</button>
+        </form>
+        
+        <div class="auth-divider">
+            <span>or sign up with</span>
+        </div>
+        
+        <div class="social-auth">
+            <button class="social-btn google" onclick="socialSignup('google')">
+                <img src="googleLogo.svg" alt="Google" style="width:24px;height:24px;margin-right:10px;">
+                Continue with Google
+            </button>
+            <button class="social-btn apple" onclick="socialSignup('apple')">
+                <i class="fab fa-apple" style="margin-right:10px;font-size:20px;"></i>
+                Continue with Apple
+            </button>
+        </div>
+        
+        <p class="auth-redirect">
+            Already have an account? <a href="login.html">Log in</a>
+        </p>
+    </div>
+    
+    <script>
+        // Toggle password visibility
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+        
+        // Handle signup form submission
+        function signupUser(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const birthdate = document.getElementById('birthdate').value;
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Creating account...';
+            submitBtn.disabled = true;
+            // Get users from localStorage
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            // Check if email already exists
+            if (users.some(u => u.email === email)) {
+                alert('An account with this email already exists. Please log in or use a different email.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+            // Add new user
+            users.push({ name, birthdate, email, password });
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', email);
+            // Redirect to login
+            setTimeout(function() {
+                window.location.href = "login.html";
+            }, 1000);
+        }
+        
+        // Handle social signup
+        function socialSignup(provider) {
+            // Show loading indicator on the button
+            const button = document.querySelector(`.social-btn.${provider}`);
+            const originalContent = button.innerHTML;
+            
+            if (provider === 'google') {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+            } else {
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+            }
+            
+            button.disabled = true;
+            
+            // Show consent popup (for demo purposes)
+            setTimeout(function() {
+                showConsentPopup(provider, button, originalContent);
+            }, 1000);
+        }
+        
+        // Show consent popup
+        function showConsentPopup(provider, button, originalContent) {
+            // Create modal overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.display = 'flex';
+            overlay.style.justifyContent = 'center';
+            overlay.style.alignItems = 'center';
+            overlay.style.zIndex = '1000';
+            
+            // Create modal content
+            const modal = document.createElement('div');
+            modal.style.backgroundColor = 'white';
+            modal.style.borderRadius = '12px';
+            modal.style.padding = '24px';
+            modal.style.width = '90%';
+            modal.style.maxWidth = '400px';
+            modal.style.maxHeight = 'calc(100vh - 60px)';
+            modal.style.overflowY = 'auto';
+            modal.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+            
+            const providerName = provider.charAt(0).toUpperCase() + provider.slice(1);
+            const providerColor = provider === 'google' ? '#4285F4' : '#000';
+            const providerIcon = provider === 'google' ? 
+                '<img src="googleLogo.svg" alt="Google" style="width:28px;height:28px;filter:contrast(1.2);object-fit:contain;">' : 
+                '<i class="fab fa-apple" style="font-size:28px;"></i>';
+            
+            modal.innerHTML = `
+                <div style="text-align:center;margin-bottom:20px;">
+                    <div style="font-size:20px;font-weight:bold;margin-bottom:16px;">Continue with ${providerName}</div>
+                    <p style="color:#666;margin-bottom:24px;">Connect your ${providerName} account to sign up for Klu Health</p>
+                    <div style="display:flex;align-items:center;justify-content:center;margin-bottom:24px;">
+                        <div style="width:48px;height:48px;border-radius:50%;background-color:white;display:flex;align-items:center;justify-content:center;box-shadow: 0 0 5px rgba(0,0,0,0.2);border:2px solid ${providerColor};">
+                            ${providerIcon}
+                        </div>
+                        <span style="margin:0 12px;color:#ccc;">→</span>
+                        <div style="width:48px;height:48px;border-radius:50%;background-color:white;display:flex;align-items:center;justify-content:center;box-shadow: 0 0 5px rgba(0,0,0,0.2);border:2px solid #ee6aa7;">
+                            <img src="Klu Logo.png" style="width:35px;height:35px;filter:contrast(1.2);object-fit:contain;" alt="Klu Logo">
+                        </div>
+                    </div>
+                    <p style="color:#666;font-size:14px;margin-bottom:16px;">This will allow Klu Health to:</p>
+                    <ul style="text-align:left;color:#666;font-size:14px;margin-bottom:24px;padding-left:20px;">
+                        <li style="margin-bottom:8px;">Access your name and profile picture</li>
+                        <li style="margin-bottom:8px;">Access your email address</li>
+                        <li>Create a new account linked to your ${providerName} profile</li>
+                    </ul>
+                    <div style="background-color:#f9f0f5;padding:12px;border-radius:8px;text-align:left;margin-bottom:24px;">
+                        <p style="font-size:14px;color:#666;margin-bottom:8px;">By continuing, you agree to:</p>
+                        <div style="display:flex;align-items:center;margin-bottom:8px;">
+                            <input type="checkbox" checked style="margin-right:8px;" id="terms-checkbox">
+                            <label for="terms-checkbox" style="font-size:14px;color:#666;">Klu's <a href="terms.html" style="color:#ee6aa7;">Terms of Service</a> and <a href="#" style="color:#ee6aa7;">Privacy Policy</a></label>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                    <button id="cancel-btn" style="padding:10px 24px;border-radius:24px;border:1px solid #ee6aa7;background:white;color:#ee6aa7;font-weight:500;cursor:pointer;transition:background-color 0.2s ease, color 0.2s ease;" 
+                    onmouseover="this.style.backgroundColor='#ee6aa7'; this.style.color='white';" 
+                    onmouseout="this.style.backgroundColor='white'; this.style.color='#ee6aa7';">Cancel</button>
+                    <button id="allow-btn" style="padding:10px 32px;border-radius:24px;border:none;background-color:#ee6aa7;color:white;font-weight:500;cursor:pointer;transition:background-color 0.2s ease;" 
+                    onmouseover="this.style.backgroundColor='#e05a97';" 
+                    onmouseout="this.style.backgroundColor='#ee6aa7';">Continue</button>
+                </div>
+            `;
+            
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+            
+            // Event listeners for buttons
+            document.getElementById('cancel-btn').addEventListener('click', function() {
+                // Restore original button state
+                button.innerHTML = originalContent;
+                button.disabled = false;
+                
+                // Remove overlay
+                document.body.removeChild(overlay);
+            });
+            
+            document.getElementById('allow-btn').addEventListener('click', function() {
+                // Check if terms checkbox is checked
+                const termsCheckbox = document.getElementById('terms-checkbox');
+                if (!termsCheckbox.checked) {
+                    alert('You must agree to the Terms of Service and Privacy Policy to continue.');
+                    return;
+                }
+                
+                // Remove overlay
+                document.body.removeChild(overlay);
+                
+                // Show loading on button again
+                if (provider === 'google') {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                } else {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                }
+                
+                // Simulate account creation process
+                setTimeout(function() {
+                    window.location.href = "login.html";
+                }, 1500);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const birthdateInput = document.getElementById('birthdate');
+            
+            // Clear the birthdate value and set placeholder
+            birthdateInput.value = '';
+            birthdateInput.placeholder = 'Select your birth date';
+            
+            // Create and add custom calendar UI to the body
+            const calendarHTML = `
+                <div class="calendar-wrapper" id="customCalendar">
+                    <div class="calendar-header">
+                        <div class="calendar-title">
+                            <div class="month-select-wrapper">
+                                <select id="calendarMonth">
+                                    <option value="0">January</option>
+                                    <option value="1">February</option>
+                                    <option value="2">March</option>
+                                    <option value="3">April</option>
+                                    <option value="4">May</option>
+                                    <option value="5">June</option>
+                                    <option value="6">July</option>
+                                    <option value="7">August</option>
+                                    <option value="8">September</option>
+                                    <option value="9">October</option>
+                                    <option value="10">November</option>
+                                    <option value="11">December</option>
+                                </select>
+                            </div>
+                            <div id="calendarYear"></div>
+                        </div>
+                        <div class="calendar-nav">
+                            <button id="prevMonth">◀</button>
+                            <button id="nextMonth">▶</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-weekdays">
+                            <div>Sun</div>
+                            <div>Mon</div>
+                            <div>Tue</div>
+                            <div>Wed</div>
+                            <div>Thu</div>
+                            <div>Fri</div>
+                            <div>Sat</div>
+                        </div>
+                        <div class="calendar-days" id="calendarDays"></div>
+                    </div>
+                    <div class="years-list" id="yearsList"></div>
+                    <div class="calendar-footer">
+                        <button class="btn-cancel" id="cancelDate" style="background-color: white; color: #ee6aa7; border: 1px solid #ee6aa7; font-weight: 600;" 
+                        onmouseover="this.style.backgroundColor='#ee6aa7'; this.style.color='white';" 
+                        onmouseout="this.style.backgroundColor='white'; this.style.color='#ee6aa7';">Cancel</button>
+                        <button class="btn-apply" id="applyDate">Apply</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', calendarHTML);
+            
+            // Calendar Variables
+            const calendar = document.getElementById('customCalendar');
+            const monthSelect = document.getElementById('calendarMonth');
+            const yearDisplay = document.getElementById('calendarYear');
+            const daysGrid = document.getElementById('calendarDays');
+            const yearsList = document.getElementById('yearsList');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            const cancelBtn = document.getElementById('cancelDate');
+            const applyBtn = document.getElementById('applyDate');
+            
+            let currentDate = new Date();
+            let selectedDate = new Date();
+            let activeInput = null;
+            
+            // Generate Years List
+            function generateYearsList() {
+                const startYear = 1950;
+                const endYear = new Date().getFullYear();
+                yearsList.innerHTML = '';
+                
+                for (let year = startYear; year <= endYear; year++) {
+                    const yearEl = document.createElement('div');
+                    yearEl.textContent = year;
+                    yearEl.dataset.year = year;
+                    if (year === currentDate.getFullYear()) {
+                        yearEl.classList.add('selected');
+                    }
+                    yearEl.addEventListener('click', function() {
+                        currentDate.setFullYear(year);
+                        renderCalendar();
+                        yearsList.style.display = 'none';
+                    });
+                    yearsList.appendChild(yearEl);
+                }
+            }
+            
+            // Render Calendar Days
+            function renderCalendar() {
+                monthSelect.value = currentDate.getMonth();
+                yearDisplay.textContent = currentDate.getFullYear();
+                
+                // Calculate the first day of the month
+                const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                
+                // Get the day of week for the first day (0-6)
+                const firstDayOfWeek = firstDayOfMonth.getDay();
+                
+                // Clear the grid
+                daysGrid.innerHTML = '';
+                
+                // Add days from previous month
+                const prevMonthLastDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+                for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+                    const dayEl = document.createElement('div');
+                    dayEl.classList.add('calendar-day', 'other-month');
+                    dayEl.textContent = prevMonthLastDay - i;
+                    daysGrid.appendChild(dayEl);
+                }
+                
+                // Add days for current month
+                for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
+                    const dayEl = document.createElement('div');
+                    dayEl.classList.add('calendar-day');
+                    dayEl.textContent = day;
+                    
+                    // Check if this day is the selected date
+                    if (selectedDate && 
+                        day === selectedDate.getDate() && 
+                        currentDate.getMonth() === selectedDate.getMonth() && 
+                        currentDate.getFullYear() === selectedDate.getFullYear()) {
+                        dayEl.classList.add('active');
+                    }
+                    
+                    dayEl.addEventListener('click', function() {
+                        // Remove active class from all days
+                        document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                        // Add active class to selected day
+                        dayEl.classList.add('active');
+                        // Update selectedDate
+                        selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
+                    });
+                    
+                    daysGrid.appendChild(dayEl);
+                }
+                
+                // Add days from next month if needed to fill the grid
+                const daysRendered = firstDayOfWeek + lastDayOfMonth.getDate();
+                const rowsNeeded = Math.ceil(daysRendered / 7);
+                const totalCells = rowsNeeded * 7;
+                
+                if (daysRendered < totalCells) {
+                    const daysToAdd = totalCells - daysRendered;
+                    for (let i = 1; i <= daysToAdd; i++) {
+                        const dayEl = document.createElement('div');
+                        dayEl.classList.add('calendar-day', 'other-month');
+                        dayEl.textContent = i;
+                        daysGrid.appendChild(dayEl);
+                    }
+                }
+            }
+            
+            // Event Listeners
+            yearDisplay.addEventListener('click', function() {
+                if (yearsList.style.display === 'block') {
+                    yearsList.style.display = 'none';
+                } else {
+                    yearsList.style.display = 'block';
+                    // Scroll to selected year
+                    const selectedYearEl = yearsList.querySelector('.selected');
+                    if (selectedYearEl) {
+                        selectedYearEl.scrollIntoView({ block: 'center' });
+                    }
+                }
+            });
+            
+            monthSelect.addEventListener('change', function() {
+                currentDate.setMonth(parseInt(this.value));
+                renderCalendar();
+            });
+            
+            prevMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+            
+            nextMonthBtn.addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+            
+            cancelBtn.addEventListener('click', function() {
+                calendar.style.display = 'none';
+            });
+            
+            applyBtn.addEventListener('click', function() {
+                if (activeInput && selectedDate) {
+                    const year = selectedDate.getFullYear();
+                    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(selectedDate.getDate()).padStart(2, '0');
+                    activeInput.value = `${year}-${month}-${day}`;
+                }
+                calendar.style.display = 'none';
+            });
+            
+            // Close calendar when clicking outside
+            document.addEventListener('mousedown', function(e) {
+                if (calendar.style.display === 'block' && 
+                    !calendar.contains(e.target) && 
+                    !activeInput.contains(e.target)) {
+                    calendar.style.display = 'none';
+                }
+                
+                // Close years list when clicking outside
+                if (yearsList.style.display === 'block' && 
+                    !yearsList.contains(e.target) &&
+                    !yearDisplay.contains(e.target)) {
+                    yearsList.style.display = 'none';
+                }
+            });
+            
+            // Custom date input handling
+            birthdateInput.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent event bubbling
+                activeInput = this;
+                
+                // Set an initial date - 18 years ago as default
+                const today = new Date();
+                const eighteenYearsAgo = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+                
+                // Get element positions
+                const rect = this.getBoundingClientRect();
+                const windowWidth = window.innerWidth;
+                const calendarHeight = 350; // Approximate height of the calendar
+                
+                // Calculate position next to the calendar icon (which is on the right side of the input)
+                const calendarIconPosition = rect.right - 36; // Calendar icon is about 36px from right edge
+                const inputHeight = rect.height;
+                const iconCenterY = rect.top + (inputHeight / 2); // Vertical center of the icon
+                
+                // Position calendar to the right of the calendar icon
+                let calendarLeft = calendarIconPosition + 15;
+                let calendarTop = iconCenterY - 175; // Position so the arrow aligns with the icon
+                let useLeftArrow = true;
+                let useBottomArrow = false;
+                
+                // If there's not enough room to the right, position to the left of the input
+                if (calendarLeft + 300 > windowWidth - 20) {
+                    calendarLeft = rect.left - 310;
+                    useLeftArrow = true;
+                }
+                
+                // Make sure the calendar stays within viewport bounds
+                if (calendarTop < 10) {
+                    calendarTop = 10;
+                }
+                
+                // Update calendar position
+                calendar.style.position = 'fixed';
+                calendar.style.top = `${calendarTop}px`;
+                calendar.style.left = `${calendarLeft}px`;
+                
+                // Handle arrow classes
+                calendar.classList.remove('left-arrow', 'bottom-arrow');
+                if (useLeftArrow) {
+                    calendar.classList.add('left-arrow');
+                    
+                    // Dynamically position the arrow to point at the icon center
+                    // We can only change this via JavaScript since we need to calculate the position
+                    setTimeout(() => {
+                        const arrowElement = document.querySelector('.calendar-wrapper.left-arrow::before');
+                        if (arrowElement) {
+                            const calendarRect = calendar.getBoundingClientRect();
+                            const arrowTop = iconCenterY - calendarRect.top;
+                            arrowElement.style.top = `${arrowTop}px`;
+                        }
+                    }, 0);
+                }
+                if (useBottomArrow) {
+                    calendar.classList.add('bottom-arrow');
+                }
+                
+                // Parse the current input value or use default
+                if (this.value) {
+                    const [yearVal, monthVal, dayVal] = this.value.split('-');
+                    selectedDate = new Date(yearVal, monthVal - 1, dayVal);
+                    currentDate = new Date(yearVal, monthVal - 1, 1);
+                } else {
+                    selectedDate = eighteenYearsAgo;
+                    currentDate = new Date(eighteenYearsAgo.getFullYear(), eighteenYearsAgo.getMonth(), 1);
+                }
+                
+                // Prevent shakiness by preparing the calendar before showing
+                renderCalendar();
+                generateYearsList();
+                
+                // Use requestAnimationFrame for smoother appearance
+                requestAnimationFrame(() => {
+                    calendar.style.display = 'block';
+                });
+            });
+            
+            // Initialize calendar
+            generateYearsList();
+            renderCalendar();
+        });
+    </script>
+</body>
+</html> 
